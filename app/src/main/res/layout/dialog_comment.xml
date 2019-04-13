@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <ListView
+        android:id="@+id/listView_storedComment"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"></ListView>
+    <TextView
+        android:id="@+id/dialog_comment_username"
+        android:layout_width="80dp"
+        android:layout_height="73dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="250dp"
+        android:text="Day la ten nguoi comment" />
+
+    <EditText
+        android:id="@+id/dialog_comment_content"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="81dp"
+        android:layout_marginTop="250dp"
+        android:text="Day la noi dung comment" />
+
+    <Button
+        android:id="@+id/btn_dialog_comment_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="51dp"
+        android:layout_marginLeft="30dp"
+        android:text="Xác nhận" />
+
+    <Button
+        android:id="@+id/btn_dialog_comment_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="51dp"
+        android:layout_marginLeft="200dp"
+        android:text="Hủy" />
+</RelativeLayout>
