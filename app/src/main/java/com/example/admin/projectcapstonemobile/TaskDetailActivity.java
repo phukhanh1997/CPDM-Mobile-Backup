@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +39,8 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TaskDetailActivity extends AppCompatActivity {
     private final String userInformationSharedPreferences = "informationSharedPreferences";
@@ -45,6 +49,7 @@ public class TaskDetailActivity extends AppCompatActivity {
     private TextView txt_to;
     private TextView txt_taskTitle;
     private TextView txt_taskSummary;
+    private TextView headerTextComment;
     private ListView listView_comment;
     private ListView listView_storedComment;
     private ExpandableListView listView_taskIssue;
@@ -119,6 +124,10 @@ public class TaskDetailActivity extends AppCompatActivity {
         txt_taskTitle.setText("Tiêu đề: " + task.getTitle());
         txt_taskSummary.setText("Nội dung:" + task.getDescription());
         btnChangeStatus.setText("Đang thực hiện");
+        if(task.getStatus().equals("Waiting")){
+            btnChangeStatus.setText("Đang chờ");
+            btnChangeStatus.setEnabled(false);
+        }
         System.out.println("Luc load len la`" + btnChangeStatus.getText());
         //load issue
         listIssue = getAllTaskIssue(userToken, taskId);
@@ -199,12 +208,25 @@ public class TaskDetailActivity extends AppCompatActivity {
         btnChangeStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer taskId = task.getId();
-                changeStatus(taskId);
-                task.setStatus("Done");
-                btnChangeStatus.setText(task.getStatus());
-                finish();
-                startActivity(getIntent());
+                Call<Task> call = taskService.changeStatusTask("Bearer " + userToken, taskId);
+                call.enqueue(new Callback<Task>() {
+                    @Override
+                    public void onResponse(Call<Task> call, Response<Task> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(TaskDetailActivity.this, "Báo cáo hoàn tất thành công.", Toast.LENGTH_SHORT).show();
+                            finish();
+                            startActivity(getIntent());
+                        }
+                        else{
+                            Toast.makeText(TaskDetailActivity.this, "Bạn chưa hoàn thành các vấn đề được giao.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Task> call, Throwable t) {
+                        Toast.makeText(TaskDetailActivity.this, "Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 System.out.println("Status bay gio la: " + task.getStatus());
             }
         });

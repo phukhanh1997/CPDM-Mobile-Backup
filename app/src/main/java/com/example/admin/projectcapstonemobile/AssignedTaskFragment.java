@@ -67,7 +67,7 @@ public class AssignedTaskFragment extends Fragment {
         if(tasks!=null){
             System.out.println("Day la size cua list tasks" + tasks.size());
             for (Task task: tasks) {
-                if(currentDate.after(task.getEndTime())){
+                if(task.getStatus().equals("Outdated")){
                     toRemove.add(task);
                 }
             }
@@ -77,13 +77,8 @@ public class AssignedTaskFragment extends Fragment {
                 System.out.println(x.getTitle());
             }
         }
-        //set header for list view over date
-//        LayoutInflater inflater1 = getLayoutInflater();
-//        ViewGroup headerOverDate = (ViewGroup) inflater1.inflate(R.layout.listview_header, listViewOverDate, false);
-//        listView.addHeaderView(headerOverDate);
-//        headerTextOverDate = (TextView) headerOverDate.findViewById(R.id.textView_header);
-//        headerTextOverDate.setText("List task assigned over date");
-        //set header for list view
+
+
         if(toRemove!=null){
             listViewOverDate.setAdapter(new TaskListAdapter(toRemove, getActivity()));
         }
@@ -123,9 +118,9 @@ public class AssignedTaskFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Object object = listView.getItemAtPosition(position);
                     Task task = (Task) object;
-                    Toast.makeText(getContext(), "You clicked in " + task.getTitle(), Toast.LENGTH_SHORT).show();
+                    Integer taskId = task.getId();
                     Intent intent = new Intent(getContext(), TaskDetailActivity.class);
-                    intent.putExtra("TaskDetail", task);
+                    intent.putExtra("taskId", taskId);
                     startActivity(intent);
                 }
             });
