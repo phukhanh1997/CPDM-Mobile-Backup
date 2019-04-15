@@ -67,7 +67,7 @@ public class AssignedTaskFragment extends Fragment {
         if(tasks!=null){
             System.out.println("Day la size cua list tasks" + tasks.size());
             for (Task task: tasks) {
-                if(task.getStatus().equals("Outdated")){
+                if(task.getStatus().equals("Outdated") || task.getStatus().equals("Complete outdated")){
                     toRemove.add(task);
                 }
             }
