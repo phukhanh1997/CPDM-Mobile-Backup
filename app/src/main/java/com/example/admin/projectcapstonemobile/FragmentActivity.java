@@ -56,8 +56,8 @@ public class FragmentActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager){
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new CreatedTaskFragment(), "Công việc    khởi tạo");
-        adapter.addFragment(new AssignedTaskFragment(), "Công việc tham gia");
+        adapter.addFragment(new CreatedTaskFragment(), "Tác vụ    đã giao");
+        adapter.addFragment(new AssignedTaskFragment(), "Tác vụ tham gia");
         adapter.addFragment(new UserInformationFragment(), "Quản lý    người dùng");
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);

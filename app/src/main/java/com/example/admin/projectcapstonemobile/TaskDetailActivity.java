@@ -69,7 +69,8 @@ public class TaskDetailActivity extends AppCompatActivity {
     private Button btn_dialog_comment_confirm;
     private Button btn_dialog_comment_cancel;
     private Button btnChangeStatus;
-
+    private Button btn_confirm_change_status;
+    private Button btn_cancel_change_status;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +129,14 @@ public class TaskDetailActivity extends AppCompatActivity {
             btnChangeStatus.setText("Đang chờ");
             btnChangeStatus.setEnabled(false);
         }
+        if(task.getStatus().equals("Completed")){
+            btnChangeStatus.setText("Hoàn thành");
+            btnChangeStatus.setEnabled(false);
+        }
+        if(task.getStatus().equals("Complete outdated")){
+            btnChangeStatus.setText("Hoàn thành quá hạn");
+            btnChangeStatus.setEnabled(false);
+        }
         System.out.println("Luc load len la`" + btnChangeStatus.getText());
         //load issue
         listIssue = getAllTaskIssue(userToken, taskId);
@@ -140,6 +149,13 @@ public class TaskDetailActivity extends AppCompatActivity {
             listView_taskIssue.setAdapter(new TaskIssueAdapter(listHeader, listDataChild, this));
             System.out.println("Day la taskIssue " + listIssue.size());
         }
+
+        // confirm change status dialog
+        Dialog confirmDialog = new Dialog(this);
+        confirmDialog.setTitle("Báo cáo hoàn tất?");
+        confirmDialog.setContentView(R.layout.dialog_confirm_changestatus);
+        btn_confirm_change_status = (Button) confirmDialog.findViewById(R.id.btn_confirm_changestatus);
+        btn_cancel_change_status = (Button) confirmDialog.findViewById(R.id.btn_cancel_changestatus);
 
         //load comment
         listComment = getAllCommentByTaskId(task.getId());
@@ -208,26 +224,38 @@ public class TaskDetailActivity extends AppCompatActivity {
         btnChangeStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call<Task> call = taskService.changeStatusTask("Bearer " + userToken, taskId);
-                call.enqueue(new Callback<Task>() {
-                    @Override
-                    public void onResponse(Call<Task> call, Response<Task> response) {
-                        if(response.isSuccessful()){
-                            Toast.makeText(TaskDetailActivity.this, "Báo cáo hoàn tất thành công.", Toast.LENGTH_SHORT).show();
-                            finish();
-                            startActivity(getIntent());
-                        }
-                        else{
-                            Toast.makeText(TaskDetailActivity.this, "Bạn chưa hoàn thành các vấn đề được giao.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
 
+                confirmDialog.show();
+                btn_confirm_change_status.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFailure(Call<Task> call, Throwable t) {
-                        Toast.makeText(TaskDetailActivity.this, "Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                    public void onClick(View v) {
+                        Call<Task> call = taskService.changeStatusTask("Bearer " + userToken, taskId);
+                        call.enqueue(new Callback<Task>() {
+                            @Override
+                            public void onResponse(Call<Task> call, Response<Task> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(TaskDetailActivity.this, "Báo cáo hoàn tất thành công.", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                    startActivity(getIntent());
+                                }
+                                else{
+                                    Toast.makeText(TaskDetailActivity.this, "Bạn chưa hoàn thành các vấn đề được giao.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Task> call, Throwable t) {
+                                Toast.makeText(TaskDetailActivity.this, "Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
-                System.out.println("Status bay gio la: " + task.getStatus());
+                btn_cancel_change_status.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        confirmDialog.dismiss();
+                    }
+                });
             }
         });
         btnComment.setOnClickListener(new View.OnClickListener() {
