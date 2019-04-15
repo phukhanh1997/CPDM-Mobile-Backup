@@ -86,7 +86,13 @@ public class FragmentActivity extends AppCompatActivity {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
-
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+        @Override
+        public long getItemId(int position) {
+            return mFragmentList.get(position).getId();
+        }
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);

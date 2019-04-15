@@ -62,7 +62,7 @@
         android:layout_alignTop="@+id/btn_confirm_leave_accept"
         android:layout_marginBottom="30dp"
         android:layout_marginRight="100dp"
-        android:text="Hủy" />
+        android:text="Xóa" />
     <Button
         android:id="@+id/btn_confirm_leave_cancel"
         android:layout_width="wrap_content"

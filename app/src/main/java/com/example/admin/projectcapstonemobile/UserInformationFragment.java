@@ -329,7 +329,7 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
                                 @Override
                                 public void onClick(View v) {
                                     deleteLeaveRequest(userToken, leaveRequest.getId());
-                                    Toast.makeText(getActivity(), "Hủy đơn xin nghỉ thành công", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Xóa đơn xin nghỉ thành công", Toast.LENGTH_SHORT).show();
                                     confirm_leave_dialog.dismiss();
                                     listRequest = viewLeaveRequestForApprover(userToken, "fromDate,desc", 0);
                                     if (listRequest != null) {
