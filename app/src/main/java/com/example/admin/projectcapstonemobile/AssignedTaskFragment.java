@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,9 +39,14 @@ public class AssignedTaskFragment extends Fragment {
     private final String userInformationSharedPreferences = "informationSharedPreferences";
     private TaskService taskService;
     private List<Task> tasks;
-    private List<Task> listTask;
     private String userToken;
-    private TextView headerTextAssign;
+    public int TOTAL_LIST_ITEMS;
+    public int NUM_ITEMS_PAGE = 10;
+    private int noOfBtns;
+    private Button[] btns;
+    private TextView title;
+    private ListView listView;
+    private View rootView;
     public AssignedTaskFragment() {
         // Required empty public constructor
     }
@@ -48,26 +55,25 @@ public class AssignedTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_assigned_task, null);
+        rootView = inflater.inflate(R.layout.fragment_assigned_task, null);
         // Inflate the layout for this fragment
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         getActivity().setTitle("List Task Assigned");
-        final ListView listView = (ListView) rootView.findViewById(R.id.listTaskAssigned);
+        listView = (ListView) rootView.findViewById(R.id.listTaskAssigned);
+        title = (TextView) rootView.findViewById(R.id.titlePagination);
         //userToken = (String) getActivity().getIntent().getSerializableExtra("UserToken");
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
         System.out.println("Day la userToken o assigned task " + userToken);
         taskService = ApiUtils.getTaskService();
         tasks = getAllTask();
+        TOTAL_LIST_ITEMS = tasks.size();
+        System.out.println("TOTAL LÍT ITEM = " + TOTAL_LIST_ITEMS);
+        Btnfooter();
 
-        if(tasks!=null){
-            listView.setAdapter(new TaskListAdapter(tasks, getActivity()));
-            ViewGroup header = (ViewGroup)inflater.inflate(R.layout.listview_header, listView, false);
-            listView.addHeaderView(header, null, false);
-        }
-
-
+        loadList(0);
+        CheckBtnBackGroud(0);
         if(listView.getCount()==0){
             listView.setVisibility(View.INVISIBLE);
         }
@@ -85,6 +91,72 @@ public class AssignedTaskFragment extends Fragment {
             });
         }
         return rootView;
+    }
+    private void Btnfooter()
+    {
+        int val = TOTAL_LIST_ITEMS%NUM_ITEMS_PAGE;
+        val = val==0?0:1;
+        noOfBtns=TOTAL_LIST_ITEMS/NUM_ITEMS_PAGE+val;
+
+        LinearLayout ll = (LinearLayout)rootView.findViewById(R.id.btnLay);
+
+        btns = new Button[noOfBtns];
+
+        for(int i=0;i<noOfBtns;i++)
+        {
+            btns[i] =   new Button(this.getActivity());
+            btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            btns[i].setText(""+(i+1));
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            ll.addView(btns[i], lp);
+
+            final int j = i;
+            btns[j].setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v)
+                {
+                    loadList(j);
+                    CheckBtnBackGroud(j);
+                }
+            });
+        }
+
+    }
+    private void CheckBtnBackGroud(int index)
+    {
+        title.setText("Danh sách công việc");
+        for(int i=0;i<noOfBtns;i++)
+        {
+            if(i==index)
+            {
+                btns[index].setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                btns[i].setTextColor(getResources().getColor(android.R.color.white));
+            }
+            else
+            {
+                btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                btns[i].setTextColor(getResources().getColor(android.R.color.black));
+            }
+        }
+    }
+    private void loadList(int number)
+    {
+        List<Task> sort = new ArrayList<Task>();
+
+        int start = number * NUM_ITEMS_PAGE;
+        for(int i=start;i<(start)+NUM_ITEMS_PAGE;i++)
+        {
+            if(i<tasks.size())
+            {
+                sort.add(tasks.get(i));
+            }
+            else
+            {
+                break;
+            }
+        }
+            listView.setAdapter(new TaskListAdapter(sort, getActivity()));
     }
     private List<Task> getAllTask(){
         List<Task> content = new ArrayList<>();
