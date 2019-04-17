@@ -25,9 +25,6 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
 
         // Check if message contains a data payload.
-        Map<String, String> data = remoteMessage.getData();
-        System.out.println("Day la cai gi do?");
-        data.toString();
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {

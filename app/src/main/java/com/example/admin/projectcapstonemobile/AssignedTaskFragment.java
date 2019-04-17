@@ -4,6 +4,7 @@ package com.example.admin.projectcapstonemobile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -38,7 +39,6 @@ public class AssignedTaskFragment extends Fragment {
     private List<Task> tasks;
     private List<Task> listTask;
     private String userToken;
-    private TextView headerTextOverDate;
     private TextView headerTextAssign;
     public AssignedTaskFragment() {
         // Required empty public constructor
@@ -54,66 +54,25 @@ public class AssignedTaskFragment extends Fragment {
         StrictMode.setThreadPolicy(policy);
         getActivity().setTitle("List Task Assigned");
         final ListView listView = (ListView) rootView.findViewById(R.id.listTaskAssigned);
-        final ListView listViewOverDate = (ListView) rootView.findViewById(R.id.listTaskOverDate);
         //userToken = (String) getActivity().getIntent().getSerializableExtra("UserToken");
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
         System.out.println("Day la userToken o assigned task " + userToken);
         taskService = ApiUtils.getTaskService();
-        listTask = getAllTask();
         tasks = getAllTask();
-        List<Task> toRemove = new ArrayList<Task>();
-        Date currentDate = Calendar.getInstance().getTime();
-        if(tasks!=null){
-            System.out.println("Day la size cua list tasks" + tasks.size());
-            for (Task task: tasks) {
-                if(task.getStatus().equals("Outdated") || task.getStatus().equals("Complete outdated")){
-                    toRemove.add(task);
-                }
-            }
-            tasks.removeAll(toRemove);
-            for (Task x: tasks
-                 ) {
-                System.out.println(x.getTitle());
-            }
-        }
 
-
-        if(toRemove!=null){
-            listViewOverDate.setAdapter(new TaskListAdapter(toRemove, getActivity()));
-        }
-        if(listViewOverDate.getCount()==0){
-            listViewOverDate.setVisibility(View.INVISIBLE);
-        }
-        listViewOverDate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object object = listViewOverDate.getItemAtPosition(position);
-                Task task = (Task) object;
-                Integer taskId = task.getId();
-                Intent intent = new Intent(getContext(), TaskDetailActivity.class);
-                intent.putExtra("taskId", taskId);
-                startActivity(intent);
-            }
-        });
-
-        //set header for list view
-//        LayoutInflater inflater2 = getLayoutInflater();
-//        ViewGroup header = (ViewGroup) inflater2.inflate(R.layout.listview_header, listView, false);
-//        listView.addHeaderView(header);
-//        headerTextAssign = (TextView) header.findViewById(R.id.textView_header);
-//        headerTextAssign.setText("List task assigned");
-        //
         if(tasks!=null){
             listView.setAdapter(new TaskListAdapter(tasks, getActivity()));
+            ViewGroup header = (ViewGroup)inflater.inflate(R.layout.listview_header, listView, false);
+            listView.addHeaderView(header, null, false);
         }
+
 
         if(listView.getCount()==0){
             listView.setVisibility(View.INVISIBLE);
         }
         else{
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Object object = listView.getItemAtPosition(position);

@@ -37,7 +37,6 @@ public class CreatedTaskFragment extends Fragment {
     private TaskService taskService;
     private List<Task> tasks;
     private String userToken;
-    private TextView headerText;
     public CreatedTaskFragment() {
         // Required empty public constructor
     }
@@ -52,60 +51,17 @@ public class CreatedTaskFragment extends Fragment {
         StrictMode.setThreadPolicy(policy);
         getActivity().setTitle("List task created");
         final ListView listView = (ListView) rootView.findViewById(R.id.listTaskCreated);
-        final ListView listViewOverDate = (ListView) rootView.findViewById(R.id.listTaskCreatedOverDate);
         //userToken = (String) getActivity().getIntent().getSerializableExtra("UserToken");
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
         taskService = ApiUtils.getTaskService();
         tasks = getAllTask();
-        List<Task> toRemove = new ArrayList<Task>();
-        //==Add list task over date
-        Date currentDate = Calendar.getInstance().getTime();
-        if(tasks!=null){
-            System.out.println("Day la size cua list tasks" + tasks.size());
-            for (Task task: tasks) {
-                if(currentDate.after(task.getEndTime())){
-                    toRemove.add(task);
-                }
-            }
-            tasks.removeAll(toRemove);
-            for (Task x: tasks
-                    ) {
-                System.out.println(x.getTitle());
-            }
-        }
-        //
-        //==Set header for list task over date
-//        LayoutInflater inflater1 = getLayoutInflater();
-//        ViewGroup headerOverDate = (ViewGroup) inflater1.inflate(R.layout.listview_header, listViewOverDate, false);
-//        listView.addHeaderView(headerOverDate);
-//        headerText = (TextView) headerOverDate.findViewById(R.id.textView_header);
-//        headerText.setText("List task assigned over date");
-        //==
-
-        if(toRemove!=null){
-            listViewOverDate.setAdapter(new TaskListAdapter(toRemove, getActivity()));
-        }
-        if(listViewOverDate.getCount()==0){
-            listViewOverDate.setVisibility(View.INVISIBLE);
-        }
-        else{
-            listViewOverDate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Object object = listViewOverDate.getItemAtPosition(position);
-                    Task task = (Task) object;
-                    Integer taskId = task.getId();
-                    Toast.makeText(getContext(), "You clicked in " + task.getTitle(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getContext(), TaskDetailActivity.class);
-                    intent.putExtra("taskId", taskId);
-                    startActivity(intent);
-                }
-            });
-        }
 
         if (tasks != null) {
             listView.setAdapter(new TaskListAdapter(tasks, getActivity()));
+            LayoutInflater inflater1 = getLayoutInflater();
+            ViewGroup headerOverDate = (ViewGroup) inflater1.inflate(R.layout.listview_header, listView, false);
+            listView.addHeaderView(headerOverDate);
         }
         if (listView.getCount() == 0) {
             listView.setVisibility(View.INVISIBLE);
@@ -115,9 +71,9 @@ public class CreatedTaskFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Object object = listView.getItemAtPosition(position);
                     Task task = (Task) object;
-                    Toast.makeText(getContext(), "You clicked in " + task.getTitle(), Toast.LENGTH_SHORT).show();
+                    Integer taskId = task.getId();
                     Intent intent = new Intent(getContext(), TaskDetailActivity.class);
-                    intent.putExtra("TaskDetail", task);
+                    intent.putExtra("taskId", taskId);
                     startActivity(intent);
                 }
             });

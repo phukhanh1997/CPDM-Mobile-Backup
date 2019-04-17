@@ -9,6 +9,6 @@
         android:id="@+id/textView_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="List header"
+        android:text="Danh sách công việc"
         android:textColor="#4286f4" />
 </LinearLayout>

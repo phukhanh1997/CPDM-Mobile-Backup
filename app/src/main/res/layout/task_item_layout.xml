@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/textView_taskTitle"
-        android:layout_width="304dp"
+        android:layout_width="246dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
@@ -30,21 +30,20 @@
         android:text="Title" />
 
     <TextView
-        android:id="@+id/textView_taskSummary"
-        android:layout_width="302dp"
-        android:layout_height="45dp"
+        android:id="@+id/textView_taskProject"
+        android:layout_width="244dp"
+        android:layout_height="47dp"
         android:layout_below="@+id/textView_taskTitle"
         android:layout_alignStart="@+id/textView_taskTitle"
         android:layout_alignLeft="@+id/textView_taskTitle"
         android:layout_marginTop="0dp"
         android:width="32dp"
-        android:text="Summary" />
+        android:text="Project" />
 
     <TextView
-        android:id="@+id/textView_taskProject"
-        android:layout_width="368dp"
+        android:id="@+id/textView_taskStatus"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_taskId"
-        android:layout_alignParentStart="true"
-        android:text="Day la project" />
+        android:text="Day la status"
+        android:layout_alignParentEnd="true"/>
 </RelativeLayout>

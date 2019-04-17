@@ -1,6 +1,7 @@
 package com.example.admin.projectcapstonemobile.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,26 +49,45 @@ public class TaskListAdapter extends BaseAdapter implements Serializable {
             holder = new ViewHolder();
             holder.textId = (TextView) convertView.findViewById(R.id.textView_taskId);
             holder.textTitle = (TextView) convertView.findViewById(R.id.textView_taskTitle);
-            holder.textSummary = (TextView) convertView.findViewById(R.id.textView_taskSummary);
             holder.textProject = (TextView) convertView.findViewById(R.id.textView_taskProject);
+            holder.textStatus= (TextView) convertView.findViewById(R.id.textView_taskStatus);
             convertView.setTag(holder);
         }
         else{
             holder = (ViewHolder) convertView.getTag();
         }
+
         Task task = this.listData.get(position);
         holder.textId.setText(task.getId() + "");
         holder.textTitle.setText(task.getTitle());
-        holder.textSummary.setText(task.getDescription());
         holder.textProject.setText(task.getProject().getName());
 
+        if(task.getStatus().equals("Outdated")){
+            holder.textStatus.setText("Trễ hạn");
+            holder.textStatus.setTextColor(Color.RED);
+        }
+        else if(task.getStatus().equals("Complete outdated")){
+            holder.textStatus.setText("Hoàn thành");
+            holder.textStatus.setTextColor(Color.BLUE);
+        }
+        else if(task.getStatus().equals("Completed")){
+            holder.textStatus.setText("Hoàn thành");
+            holder.textStatus.setTextColor(Color.BLUE);
+        }
+        else if(task.getStatus().equals("Waiting")){
+            holder.textStatus.setText("Đang chờ");
+            holder.textStatus.setTextColor(Color.GRAY);
+        }
+        else{
+            holder.textStatus.setText("Đang thực hiện");
+        }
         return convertView;
     }
 
     static class ViewHolder{
         TextView textId;
         TextView textTitle;
-        TextView textSummary;
         TextView textProject;
+        TextView textStatus;
     }
 }
