@@ -1,42 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingLeft="@dimen/dp16"
+    android:paddingTop="@dimen/dp16"
+    android:paddingRight="@dimen/dp16"
+    android:paddingBottom="@dimen/dp0">
 
-    <TextView
-        android:id="@+id/textView_taskIssue_number"
-        android:layout_width="71dp"
-        android:layout_height="58dp"
-        android:text="Issue 01" />
-
-    <TextView
-        android:id="@+id/textView_taskIssue_description"
-        android:layout_width="250dp"
-        android:layout_height="58dp"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView_taskIssue_number"
-        android:text="Day la description" />
-
-    <TextView
-        android:id="@+id/textView_taskIssue_status"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView_taskIssue_number"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="11dp"
-        android:layout_toRightOf="@id/textView_taskIssue_description"
-        android:text="Day la status" />
+        android:layout_marginBottom="@dimen/dp15">
+
+        <ImageView
+            android:id="@+id/image_view_status"
+            android:layout_width="@dimen/dp16"
+            android:layout_height="@dimen/dp16"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_circle_shape" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp30"
+            android:layout_marginRight="@dimen/dp60"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_taskIssue_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1. "
+                    android:textColor="@color/pale_grey_three"
+                    android:textSize="@dimen/sp14" />
+
+                <TextView
+                    android:id="@+id/textView_taskIssue_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day la description"
+                    android:textAllCaps="false"
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/sp16" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trạng thái: "
+                    android:textColor="@color/pale_grey_three"
+                    android:textSize="@dimen/sp14" />
+
+                <TextView
+                    android:id="@+id/textView_taskIssue_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp15"
+                    android:text="Hoàn thành"
+                    android:textAllCaps="false"
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/sp14" />
+            </LinearLayout>
 
 
-    <Button
-        android:id="@+id/btn_taskIssue_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_taskIssue_number"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="-10dp"
-        android:layout_marginEnd="0dp"
-        android:text="Báo cáo"
-        android:textSize="10dp" />
-</RelativeLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_taskIssue_confirm"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp25"
+            android:layout_gravity="right|center_vertical"
+            android:background="@color/white"
+            android:text="Báo cáo"
+            android:textColor="@color/blue"
+            android:textSize="12dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp1"
+        android:layout_gravity="bottom"
+        android:background="@color/pale_grey"></FrameLayout>
+
+</FrameLayout>

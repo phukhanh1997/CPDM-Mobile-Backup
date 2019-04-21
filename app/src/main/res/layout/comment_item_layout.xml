@@ -1,30 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/textView_comment_item_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:width="64dp"
-        android:height="64dp"
-        android:text="Day la name"/>
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingLeft="@dimen/dp16"
+    android:paddingTop="@dimen/dp16"
+    android:paddingRight="@dimen/dp16"
+    android:paddingBottom="@dimen/dp0">
 
-    <TextView
-        android:id="@+id/textView_comment_item_content"
-        android:layout_width="317dp"
-        android:layout_height="63dp"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView_comment_item_name"
-        android:text="Day la content ne`" />
-
-    <TextView
-        android:id="@+id/textView_comment_item_lastModifiedDate"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_comment_item_name"
-        android:layout_alignEnd="@+id/textView_comment_item_content"
-        android:text="Day la last modifed Date ne`" />
-</RelativeLayout>
+        android:layout_marginBottom="@dimen/dp15">
+
+        <TextView
+            android:id="@+id/textView_comment_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:textColor="@color/charcoal"
+            android:textSize="@dimen/sp16"
+            android:textStyle="bold"
+            tools:text="Khanh: " />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_comment_item_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp60"
+                android:textColor="@color/charcoal"
+                android:textSize="@dimen/sp16"
+                tools:text="Fix bug sap xong roi" />
+
+            <TextView
+                android:id="@+id/textView_comment_item_lastModifiedDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp60"
+                android:textColor="@color/pale_grey_three"
+                android:textSize="@dimen/sp12"
+                tools:text="Đã chỉnh sửa" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp1"
+        android:layout_gravity="bottom"
+        android:background="@color/pale_grey"></FrameLayout>
+
+</FrameLayout>

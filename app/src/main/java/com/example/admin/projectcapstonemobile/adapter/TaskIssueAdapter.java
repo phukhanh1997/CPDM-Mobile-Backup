@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.admin.projectcapstonemobile.R;
@@ -96,19 +97,22 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
             holder.taskIssueDescription = (TextView) convertView.findViewById(R.id.textView_taskIssue_description);
             holder.taskIssueStatus = (TextView) convertView.findViewById(R.id.textView_taskIssue_status);
             holder.buttonFinish = (Button) convertView.findViewById(R.id.btn_taskIssue_confirm);
+            holder.imgStatus = convertView.findViewById(R.id.image_view_status);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         TaskIssue issue = (TaskIssue) getChild(groupPosition, childPosition);
 
-        holder.taskIssueNumber.setText(getChildId(groupPosition, childPosition) + 1 + "");
+        holder.taskIssueNumber.setText(getChildId(groupPosition, childPosition) + 1 + ". ");
         holder.taskIssueDescription.setText(issue.getDetail());
 
         if (issue.getCompleted()) {
             holder.taskIssueStatus.setText("Hoàn thành");
+            holder.imgStatus.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_checked));
         } else {
             holder.taskIssueStatus.setText("Chưa hoàn thành");
+            holder.imgStatus.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_circle_shape));
         }
         holder.buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,5 +139,6 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
         TextView taskIssueDescription;
         TextView taskIssueStatus;
         Button buttonFinish;
+        ImageView imgStatus;
     }
 }
