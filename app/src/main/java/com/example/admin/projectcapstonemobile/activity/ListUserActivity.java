@@ -17,16 +17,19 @@ import java.io.IOException;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import retrofit2.Call;
 
 public class ListUserActivity extends AppCompatActivity {
     private UserService userService;
     private List<User> users;
     private String userToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_user);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         userToken = (String) getIntent().getSerializableExtra("UserToken");
@@ -36,10 +39,9 @@ public class ListUserActivity extends AppCompatActivity {
 
 
         listView.setAdapter(new UserListAdapter(users, this));
-        if(listView.getCount()==0){
+        if (listView.getCount() == 0) {
             listView.setVisibility(View.INVISIBLE);
-        }
-        else{
+        } else {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -55,13 +57,13 @@ public class ListUserActivity extends AppCompatActivity {
 
     }
 
-    private List<User> getAllUser(){
+    private List<User> getAllUser() {
         List<User> userList = null;
         Call<List<User>> call = userService.getAllUsers("Bearer " + userToken);
         String sum = null;
-        try{
+        try {
             userList = call.execute().body();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

@@ -1,54 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/blue"
     tools:context=".activity.LoginActivity">
 
-    <TextView
-        android:id="@+id/textView_login_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="166dp"
-        android:text="Email: " />
+    <ImageView
+        android:layout_width="@dimen/dp120"
+        android:layout_height="@dimen/dp120"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp160"
+        android:src="@mipmap/ic_launcher" />
 
-    <EditText
-        android:id="@+id/editText_login_username"
-        android:layout_width="152dp"
-        android:layout_height="63dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="144dp"
-        android:hint="Email" />
-
-    <TextView
-        android:id="@+id/textView_login_password"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="230dp"
-        android:text="Mật khẩu: " />
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editText_login_password"
-        android:layout_width="166dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="218dp"
-        android:hint="Mật khẩu"
-        android:inputType="textPassword"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="@dimen/dp16">
 
-    <Button
-        android:id="@+id/btn_login_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editText_login_password"
-        android:layout_centerHorizontal="true"
-        android:text="Đăng nhập" />
-</RelativeLayout>
+            <EditText
+                android:id="@+id/editText_login_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="Email"
+                android:textSize="@dimen/sp16" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp1"
+                android:layout_marginTop="@dimen/dp10"
+                android:layout_marginBottom="@dimen/dp10"
+                android:background="@color/pale_grey"></FrameLayout>
+
+            <EditText
+                android:id="@+id/editText_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="Mật khẩu"
+                android:inputType="textPassword"
+                android:textSize="@dimen/sp16" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_login_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="@drawable/button_login"
+            android:text="Đăng nhập"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView_login_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="166dp"
+            android:text="Email: " />
+
+        <TextView
+            android:id="@+id/textView_login_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="230dp"
+            android:text="Mật khẩu: " />
+
+    </RelativeLayout>
+
+</FrameLayout>

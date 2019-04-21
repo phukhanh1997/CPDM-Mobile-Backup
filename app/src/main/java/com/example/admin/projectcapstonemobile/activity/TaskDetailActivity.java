@@ -37,11 +37,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TaskDetailActivity extends AppCompatActivity {
+
     private final String userInformationSharedPreferences = "informationSharedPreferences";
     private TextView txt_createdBy;
     private TextView txt_from;
@@ -70,6 +72,7 @@ public class TaskDetailActivity extends AppCompatActivity {
     private Button btnChangeStatus;
     private Button btn_confirm_change_status;
     private Button btn_cancel_change_status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +90,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         btnComment = (Button) findViewById(R.id.btn_task_detail_send_comment);
         btnChangeStatus = (Button) findViewById(R.id.btn_task_detail_change_status);
         listView_taskIssue = (ExpandableListView) findViewById(R.id.listView_taskIssue);
-                //dialog
+        //dialog
         commentDialog = new Dialog(TaskDetailActivity.this);
         commentDialog.setTitle("Chỉnh sửa bình luận");
         commentDialog.setContentView(R.layout.dialog_comment);
@@ -124,15 +127,15 @@ public class TaskDetailActivity extends AppCompatActivity {
         txt_taskTitle.setText("Tiêu đề: " + task.getTitle());
         txt_taskSummary.setText("Nội dung:" + task.getDescription());
         btnChangeStatus.setText("Đang thực hiện");
-        if(task.getStatus().equals("Waiting")){
+        if (task.getStatus().equals("Waiting")) {
             btnChangeStatus.setText("Đang chờ");
             btnChangeStatus.setEnabled(false);
         }
-        if(task.getStatus().equals("Completed")){
+        if (task.getStatus().equals("Completed")) {
             btnChangeStatus.setText("Hoàn thành");
             btnChangeStatus.setEnabled(false);
         }
-        if(task.getStatus().equals("Complete outdated")){
+        if (task.getStatus().equals("Complete outdated")) {
             btnChangeStatus.setText("Hoàn thành quá hạn");
             btnChangeStatus.setEnabled(false);
         }
@@ -144,7 +147,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         HashMap<String, List<TaskIssue>> listDataChild = new HashMap<String, List<TaskIssue>>();
         listDataChild.put(listHeader.get(0), listIssue);
 
-        if(listIssue!=null){
+        if (listIssue != null) {
             listView_taskIssue.setAdapter(new TaskIssueAdapter(listHeader, listDataChild, this));
             System.out.println("Day la taskIssue " + listIssue.size());
         }
@@ -173,7 +176,7 @@ public class TaskDetailActivity extends AppCompatActivity {
                     Integer commentId = thisComment.getId();
                     listStoredComment = getAllOldVersion(commentId);
                     System.out.println("Da den on item click");
-                    if(listStoredComment!=null){
+                    if (listStoredComment != null) {
                         listView_storedComment.setAdapter(new StoredCommentListAdapter(listStoredComment, commentDialog.getContext()));
                         System.out.println("Hien thi stored comment size: " + listStoredComment.size());
                     }
@@ -183,11 +186,10 @@ public class TaskDetailActivity extends AppCompatActivity {
                     System.out.println("Email cua user la " + thisComment.getUser().getId());
                     Integer userId = getUserId(userToken);
                     System.out.println("User id self la " + userId);
-                    if(userId != thisComment.getUser().getId()){
+                    if (userId != thisComment.getUser().getId()) {
                         editText_dialog_comment_content.setEnabled(false);
                         btn_dialog_comment_confirm.setVisibility(View.INVISIBLE);
-                    }
-                    else{
+                    } else {
                         editText_dialog_comment_content.setEnabled(true);
                         btn_dialog_comment_confirm.setVisibility(View.VISIBLE);
                     }
@@ -232,12 +234,11 @@ public class TaskDetailActivity extends AppCompatActivity {
                         call.enqueue(new Callback<Task>() {
                             @Override
                             public void onResponse(Call<Task> call, Response<Task> response) {
-                                if(response.isSuccessful()){
+                                if (response.isSuccessful()) {
                                     Toast.makeText(TaskDetailActivity.this, "Báo cáo hoàn tất thành công.", Toast.LENGTH_SHORT).show();
                                     finish();
                                     startActivity(getIntent());
-                                }
-                                else{
+                                } else {
                                     Toast.makeText(TaskDetailActivity.this, "Bạn chưa hoàn thành các vấn đề được giao.", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -282,24 +283,22 @@ public class TaskDetailActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(content!=null){
+        if (content != null) {
             return content;
-        }
-        else return null;
+        } else return null;
     }
 
-    private List<StoredComment> getAllOldVersion(Integer commentId){
+    private List<StoredComment> getAllOldVersion(Integer commentId) {
         List<StoredComment> content = new ArrayList<StoredComment>();
         Call<List<StoredComment>> call = commentService.loadOldVersion("Bearer " + userToken, commentId);
-        try{
+        try {
             content = call.execute().body();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        if(content!=null){
+        if (content != null) {
             return content;
-        }
-        else return null;
+        } else return null;
     }
 
     private boolean validationComment(String comment) {
@@ -336,7 +335,8 @@ public class TaskDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private Integer getUserId(String userToken){
+
+    private Integer getUserId(String userToken) {
         User user = new User();
         Call<User> call = userService.getUserInformation("Bearer " + userToken);
         try {
@@ -347,7 +347,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         return user.getId();
     }
 
-    private Task getTaskDetail(String userToken, Integer taskId){
+    private Task getTaskDetail(String userToken, Integer taskId) {
         Task taskDetail = new Task();
         Call<Task> call = taskService.getTaskDetail("Bearer " + userToken, taskId);
         try {
@@ -358,7 +358,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         return taskDetail;
     }
 
-    private List<TaskIssue> getAllTaskIssue(String userToken, Integer taskId){
+    private List<TaskIssue> getAllTaskIssue(String userToken, Integer taskId) {
         List<TaskIssue> listIssue = new ArrayList<>();
         Call<List<TaskIssue>> call = taskService.getAllTaskIssue("Bearer " + userToken, taskId);
         try {
@@ -366,9 +366,8 @@ public class TaskDetailActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(listIssue!=null){
+        if (listIssue != null) {
             return listIssue;
-        }
-        else return null;
+        } else return null;
     }
 }

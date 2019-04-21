@@ -28,24 +28,26 @@ public class FragmentActivity extends AppCompatActivity {
     private UserService userService;
     private Integer userId;
     private String userToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
+
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         userService = ApiUtils.getUserService();
         SharedPreferences sharedPreferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
 
-        String checkCode ="";
+        String checkCode = "";
         checkCode = (String) getIntent().getSerializableExtra("CheckCode");
         System.out.println("Check code de hien thi la" + checkCode);
         setupViewPager(viewPager);
-        if(checkCode==null){
+        if (checkCode == null) {
             viewPager.setCurrentItem(1);
         }
-        if(checkCode!=null){
+        if (checkCode != null) {
             viewPager.setCurrentItem(2);
             checkCode = null;
         }
@@ -53,7 +55,7 @@ public class FragmentActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager){
+    private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CreatedTaskFragment(), "Tác vụ                  đã giao");
         adapter.addFragment(new AssignedTaskFragment(), "Tác vụ        tham gia");
@@ -101,10 +103,12 @@ public class FragmentActivity extends AppCompatActivity {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
+
         @Override
         public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);

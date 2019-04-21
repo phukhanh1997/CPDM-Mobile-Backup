@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import retrofit2.Call;
 
 public class ListTaskActivity extends AppCompatActivity {
@@ -33,10 +34,12 @@ public class ListTaskActivity extends AppCompatActivity {
     private TextView textView;
     private Button btnLogin;
     private String userToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_task);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setTitle("List Task");
@@ -55,13 +58,12 @@ public class ListTaskActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if(tasks!=null){
+        if (tasks != null) {
             listView.setAdapter(new TaskListAdapter(tasks, this));
         }
-        if(listView.getCount()==0){
+        if (listView.getCount() == 0) {
             listView.setVisibility(View.INVISIBLE);
-        }
-        else{
+        } else {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -77,13 +79,14 @@ public class ListTaskActivity extends AppCompatActivity {
             });
         }
     }
-    private List<Task> getAllTask(){
+
+    private List<Task> getAllTask() {
         List<Task> content = new ArrayList<>();
         Call<List<Task>> call = taskService.getAllTasks("Bearer " + userToken);
         String sum = null;
-        try{
+        try {
             content = call.execute().body();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
