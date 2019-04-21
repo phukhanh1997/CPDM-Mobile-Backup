@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TaskDetailActivity extends AppCompatActivity {
+public class TaskDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String userInformationSharedPreferences = "informationSharedPreferences";
     private TextView txt_createdBy;
@@ -72,6 +74,7 @@ public class TaskDetailActivity extends AppCompatActivity {
     private Button btnChangeStatus;
     private Button btn_confirm_change_status;
     private Button btn_cancel_change_status;
+    private LinearLayout mImgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,6 +276,9 @@ public class TaskDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mImgBack = findViewById(R.id.linear_layout_back);
+        mImgBack.setOnClickListener(this);
     }
 
     private List<Comment> getAllCommentByTaskId(Integer taskId) {
@@ -369,5 +375,14 @@ public class TaskDetailActivity extends AppCompatActivity {
         if (listIssue != null) {
             return listIssue;
         } else return null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.linear_layout_back:
+                TaskDetailActivity.this.finish();
+                break;
+        }
     }
 }

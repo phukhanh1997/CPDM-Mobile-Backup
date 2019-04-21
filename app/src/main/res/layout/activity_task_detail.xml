@@ -1,111 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.TaskDetailActivity">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp56"
+        android:background="@color/blue">
+
+        <LinearLayout
+            android:id="@+id/linear_layout_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="@dimen/dp16"
+            android:background="@drawable/button_back"
+            android:padding="@dimen/dp10">
+
+            <ImageView
+                android:layout_width="@dimen/dp12"
+                android:layout_height="@dimen/dp12"
+                android:src="@mipmap/ic_back" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Task Detail"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp18" />
+
+    </FrameLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/white"
+        android:padding="@dimen/dp16">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1000dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView_taskDetail_createdBy"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Created by: " />
+                android:layout_height="1000dp">
 
-            <TextView
-                android:id="@+id/textView_taskDetail_timeStart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView_taskDetail_createdBy"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="7dp"
-                android:text="From:" />
+                <TextView
+                    android:id="@+id/textView_taskDetail_createdBy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Created by: " />
 
-            <TextView
-                android:id="@+id/textView_taskDetail_timeEnd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView_taskDetail_timeStart"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="9dp"
-                android:text="To:" />
+                <TextView
+                    android:id="@+id/textView_taskDetail_timeStart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_taskDetail_createdBy"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="7dp"
+                    android:text="From:" />
 
-            <TextView
-                android:id="@+id/textView_taskDetail_taskTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView_taskDetail_timeEnd"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
-                android:text="Task title: "
-                android:textAlignment="center" />
+                <TextView
+                    android:id="@+id/textView_taskDetail_timeEnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_taskDetail_timeStart"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="9dp"
+                    android:text="To:" />
 
-            <TextView
-                android:id="@+id/textView_taskDetail_taskSummary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView_taskDetail_taskTitle"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="24dp"
-                android:text="Task summary: " />
+                <TextView
+                    android:id="@+id/textView_taskDetail_taskTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_taskDetail_timeEnd"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    android:text="Task title: "
+                    android:textAlignment="center" />
 
-            <ExpandableListView
-                android:id="@+id/listView_taskIssue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView_taskDetail_taskSummary"
-                android:layout_alignParentStart="true"></ExpandableListView>
+                <TextView
+                    android:id="@+id/textView_taskDetail_taskSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_taskDetail_taskTitle"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="24dp"
+                    android:text="Task summary: " />
 
-            <Button
-                android:id="@+id/btn_task_detail_change_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/textView_taskDetail_timeEnd"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="-51dp"
-                android:layout_marginEnd="3dp"
-                android:text="Change Status"
-                android:textSize="10dp" />
+                <ExpandableListView
+                    android:id="@+id/listView_taskIssue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_taskDetail_taskSummary"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="-2dp"></ExpandableListView>
 
-            <ListView
-                android:id="@+id/listComment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/listView_taskIssue"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginBottom="140dp"></ListView>
+                <Button
+                    android:id="@+id/btn_task_detail_change_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/textView_taskDetail_timeEnd"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="-51dp"
+                    android:layout_marginEnd="3dp"
+                    android:text="Change Status"
+                    android:textSize="10dp" />
 
-            <EditText
-                android:id="@+id/edtText_task_detail_comment"
-                android:layout_width="235dp"
-                android:layout_height="45dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="0dp"
-                android:hint="Nội dung" />
+                <ListView
+                    android:id="@+id/listComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/listView_taskIssue"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginBottom="140dp"></ListView>
 
-            <Button
-                android:id="@+id/btn_task_detail_send_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@id/edtText_task_detail_comment"
-                android:text="Bình luận" />
-        </RelativeLayout>
-    </LinearLayout>
-</ScrollView>
+                <EditText
+                    android:id="@+id/edtText_task_detail_comment"
+                    android:layout_width="235dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="0dp"
+                    android:hint="Nội dung" />
+
+                <Button
+                    android:id="@+id/btn_task_detail_send_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@id/edtText_task_detail_comment"
+                    android:text="Bình luận" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

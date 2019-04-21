@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
         userService = ApiUtils.getUserService();
         setTitle("Login");
 
-
         setTitle("Login");
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
