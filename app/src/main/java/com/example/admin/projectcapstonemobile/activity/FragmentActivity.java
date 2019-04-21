@@ -1,17 +1,17 @@
-package com.example.admin.projectcapstonemobile;
+package com.example.admin.projectcapstonemobile.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 
-import com.example.admin.projectcapstonemobile.model.User;
+import com.example.admin.projectcapstonemobile.fragment.AssignedTaskFragment;
+import com.example.admin.projectcapstonemobile.fragment.CreatedTaskFragment;
+import com.example.admin.projectcapstonemobile.R;
+import com.example.admin.projectcapstonemobile.fragment.UserInformationFragment;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.UserService;
 import com.google.android.material.tabs.TabLayout;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import retrofit2.Call;
 
 public class FragmentActivity extends AppCompatActivity {
     private final String userInformationSharedPreferences = "informationSharedPreferences";

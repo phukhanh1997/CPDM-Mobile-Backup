@@ -1,7 +1,6 @@
 package com.example.admin.projectcapstonemobile.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.admin.projectcapstonemobile.R;
-import com.example.admin.projectcapstonemobile.TaskDetailActivity;
 import com.example.admin.projectcapstonemobile.model.TaskIssue;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.TaskService;

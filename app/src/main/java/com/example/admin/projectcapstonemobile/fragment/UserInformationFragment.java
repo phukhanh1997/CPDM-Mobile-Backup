@@ -1,4 +1,4 @@
-package com.example.admin.projectcapstonemobile;
+package com.example.admin.projectcapstonemobile.fragment;
 
 
 import android.app.Dialog;
@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.projectcapstonemobile.R;
+import com.example.admin.projectcapstonemobile.activity.FragmentActivity;
 import com.example.admin.projectcapstonemobile.adapter.ConfirmLeaveAdapter;
 import com.example.admin.projectcapstonemobile.model.LeaveRequest;
 import com.example.admin.projectcapstonemobile.model.User;

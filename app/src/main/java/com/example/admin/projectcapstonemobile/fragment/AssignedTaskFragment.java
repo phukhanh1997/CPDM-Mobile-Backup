@@ -1,10 +1,9 @@
-package com.example.admin.projectcapstonemobile;
+package com.example.admin.projectcapstonemobile.fragment;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -15,8 +14,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.admin.projectcapstonemobile.R;
+import com.example.admin.projectcapstonemobile.activity.TaskDetailActivity;
 import com.example.admin.projectcapstonemobile.adapter.TaskListAdapter;
 import com.example.admin.projectcapstonemobile.model.Task;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
@@ -24,8 +24,6 @@ import com.example.admin.projectcapstonemobile.remote.TaskService;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;

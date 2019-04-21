@@ -1,8 +1,9 @@
-package com.example.admin.projectcapstonemobile;
+package com.example.admin.projectcapstonemobile.activity;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.model.User;
 
 import androidx.appcompat.app.AppCompatActivity;

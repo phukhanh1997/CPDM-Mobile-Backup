@@ -1,4 +1,4 @@
-package com.example.admin.projectcapstonemobile;
+package com.example.admin.projectcapstonemobile.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,25 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
-import com.example.admin.projectcapstonemobile.SharedPreferrence.InformationSharedPreferences;
+import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.model.Credential;
 import com.example.admin.projectcapstonemobile.model.ResObject;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.UserService;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;

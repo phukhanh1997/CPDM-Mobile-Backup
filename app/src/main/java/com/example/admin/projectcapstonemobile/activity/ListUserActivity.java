@@ -1,4 +1,4 @@
-package com.example.admin.projectcapstonemobile;
+package com.example.admin.projectcapstonemobile.activity;
 
 import android.content.Intent;
 import android.os.StrictMode;
@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.adapter.UserListAdapter;
 import com.example.admin.projectcapstonemobile.model.User;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;

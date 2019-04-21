@@ -1,25 +1,12 @@
-package com.example.admin.projectcapstonemobile;
+package com.example.admin.projectcapstonemobile.activity;
 
 import android.content.Intent;
 import android.os.StrictMode;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.admin.projectcapstonemobile.adapter.TaskListAdapter;
-import com.example.admin.projectcapstonemobile.model.Task;
-import com.example.admin.projectcapstonemobile.remote.ApiUtils;
-import com.example.admin.projectcapstonemobile.remote.TaskService;
-
-import java.io.IOException;
-import java.util.List;
+import com.example.admin.projectcapstonemobile.R;
 
 import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity {
     @Override

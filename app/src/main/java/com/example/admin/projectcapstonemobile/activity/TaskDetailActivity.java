@@ -1,13 +1,11 @@
-package com.example.admin.projectcapstonemobile;
+package com.example.admin.projectcapstonemobile.activity;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.adapter.CommentListAdapter;
 import com.example.admin.projectcapstonemobile.adapter.StoredCommentListAdapter;
 import com.example.admin.projectcapstonemobile.adapter.TaskIssueAdapter;
