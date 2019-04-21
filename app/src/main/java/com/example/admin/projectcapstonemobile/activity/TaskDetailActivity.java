@@ -53,6 +53,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
     private TextView txt_taskTitle;
     private TextView txt_taskSummary;
     private TextView headerTextComment;
+    private TextView mTxtStatus;
     private ListView listView_comment;
     private ListView listView_storedComment;
     private ExpandableListView listView_taskIssue;
@@ -71,10 +72,11 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
     private EditText editText_dialog_comment_content;
     private Button btn_dialog_comment_confirm;
     private Button btn_dialog_comment_cancel;
-    private Button btnChangeStatus;
     private Button btn_confirm_change_status;
+//    private Button btnChangeStatus;
     private Button btn_cancel_change_status;
     private LinearLayout mImgBack;
+    private LinearLayout mLnlChangeStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,8 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         txt_taskSummary = (TextView) findViewById(R.id.textView_taskDetail_taskSummary);
         edtComment = (EditText) findViewById(R.id.edtText_task_detail_comment);
         btnComment = (Button) findViewById(R.id.btn_task_detail_send_comment);
-        btnChangeStatus = (Button) findViewById(R.id.btn_task_detail_change_status);
+        mLnlChangeStatus = findViewById(R.id.linear_layout_change_status);
+//        btnChangeStatus = findViewById(R.id.btn_task_detail_change_status);
         listView_taskIssue = (ExpandableListView) findViewById(R.id.listView_taskIssue);
         //dialog
         commentDialog = new Dialog(TaskDetailActivity.this);
@@ -115,34 +118,38 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         //load task information
         taskId = (Integer) getIntent().getSerializableExtra("taskId");
         Task task = getTaskDetail(userToken, taskId);
-        txt_createdBy.setText("Người tạo: " + task.getCreator().getDisplayName());
+        txt_createdBy.setText(task.getCreator().getDisplayName());
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date dateStart = new Date();
         dateStart = task.getStartTime();
 
-        txt_from.setText("Ngày bắt đầu: " + dateFormat.format(dateStart));
+        txt_from.setText(dateFormat.format(dateStart));
         Date dateEnd = new Date();
         dateEnd = task.getEndTime();
         //test
         Date currentDate = new Date(System.currentTimeMillis());
         //
-        txt_to.setText("Ngày kết thúc: " + dateFormat.format(dateEnd));
-        txt_taskTitle.setText("Tiêu đề: " + task.getTitle());
-        txt_taskSummary.setText("Nội dung:" + task.getDescription());
-        btnChangeStatus.setText("Đang thực hiện");
+        txt_to.setText(dateFormat.format(dateEnd));
+        txt_taskTitle.setText(task.getTitle());
+        txt_taskSummary.setText(task.getDescription());
+        mTxtStatus = findViewById(R.id.text_view_status);
+        mTxtStatus.setText("Đang thực hiện");
         if (task.getStatus().equals("Waiting")) {
-            btnChangeStatus.setText("Đang chờ");
-            btnChangeStatus.setEnabled(false);
+            mTxtStatus.setText("Đang chờ");
+            mLnlChangeStatus.setVisibility(View.GONE);
+//            btnChangeStatus.setEnabled(false);
         }
         if (task.getStatus().equals("Completed")) {
-            btnChangeStatus.setText("Hoàn thành");
-            btnChangeStatus.setEnabled(false);
+            mTxtStatus.setText("Hoàn thành");
+            mLnlChangeStatus.setVisibility(View.GONE);
+//            btnChangeStatus.setEnabled(false);
         }
         if (task.getStatus().equals("Complete outdated")) {
-            btnChangeStatus.setText("Hoàn thành quá hạn");
-            btnChangeStatus.setEnabled(false);
+            mTxtStatus.setText("Hoàn thành quá hạn");
+            mLnlChangeStatus.setVisibility(View.GONE);
+//            btnChangeStatus.setEnabled(false);
         }
-        System.out.println("Luc load len la`" + btnChangeStatus.getText());
+//        System.out.println("Luc load len la`" + btnChangeStatus.getText());
         //load issue
         listIssue = getAllTaskIssue(userToken, taskId);
         List<String> listHeader = new ArrayList<String>();
@@ -225,7 +232,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
             });
         }
 
-        btnChangeStatus.setOnClickListener(new View.OnClickListener() {
+        mLnlChangeStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -279,6 +286,9 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
 
         mImgBack = findViewById(R.id.linear_layout_back);
         mImgBack.setOnClickListener(this);
+
+
+
     }
 
     private List<Comment> getAllCommentByTaskId(Integer taskId) {

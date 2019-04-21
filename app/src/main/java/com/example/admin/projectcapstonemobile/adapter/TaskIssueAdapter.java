@@ -28,6 +28,7 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
     private HashMap<String, List<TaskIssue>> listDataChild;
     private Context context;
     private TaskService taskService = ApiUtils.getTaskService();
+
     public TaskIssueAdapter(List<String> listData, HashMap<String, List<TaskIssue>> listDataChild, Context context) {
         this.listData = listData;
         this.listDataChild = listDataChild;
@@ -72,7 +73,7 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
-        if(convertView==null){
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.expandable_list_view_group, null);
         }
@@ -87,7 +88,7 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
         final ViewHolder holder;
         SharedPreferences sharedPreferences = context.getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
-        if(convertView==null){
+        if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.task_issue_item_layout, null);
             holder = new ViewHolder();
@@ -96,8 +97,7 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
             holder.taskIssueStatus = (TextView) convertView.findViewById(R.id.textView_taskIssue_status);
             holder.buttonFinish = (Button) convertView.findViewById(R.id.btn_taskIssue_confirm);
             convertView.setTag(holder);
-        }
-        else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
         TaskIssue issue = (TaskIssue) getChild(groupPosition, childPosition);
@@ -105,10 +105,9 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
         holder.taskIssueNumber.setText(getChildId(groupPosition, childPosition) + 1 + "");
         holder.taskIssueDescription.setText(issue.getDetail());
 
-        if(issue.getCompleted()){
+        if (issue.getCompleted()) {
             holder.taskIssueStatus.setText("Hoàn thành");
-        }
-        else{
+        } else {
             holder.taskIssueStatus.setText("Chưa hoàn thành");
         }
         holder.buttonFinish.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +130,7 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
         return true;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         TextView taskIssueNumber;
         TextView taskIssueDescription;
         TextView taskIssueStatus;
