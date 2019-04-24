@@ -83,7 +83,7 @@
                             android:layout_marginLeft="@dimen/dp16"
                             android:textColor="@color/charcoal"
                             android:textSize="@dimen/sp16"
-                            tools:text="Fix bug Android" />
+                            tools:text="Công việc 1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -106,7 +106,7 @@
                             android:layout_marginLeft="@dimen/dp16"
                             android:textColor="@color/charcoal"
                             android:textSize="@dimen/sp16"
-                            tools:text="KhanhKT" />
+                            tools:text="KhanhNP" />
 
                     </LinearLayout>
 

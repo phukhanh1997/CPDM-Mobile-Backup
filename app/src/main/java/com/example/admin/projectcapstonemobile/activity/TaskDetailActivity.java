@@ -279,7 +279,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
                     finish();
                     startActivity(getIntent());
                 } else {
-                    Toast.makeText(TaskDetailActivity.this, "Comment can't be empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TaskDetailActivity.this, "Vui lòng nhập nội dung bình luận.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

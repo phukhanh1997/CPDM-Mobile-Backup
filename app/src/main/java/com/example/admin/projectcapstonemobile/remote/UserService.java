@@ -31,5 +31,6 @@ public interface UserService {
     @GET("users/findAllDisplayNameByDepartmentAndRoleNameOfCurrentLoggedManager")
     Call<List<User>> getApprover(@Header("Authorization") String userToken, @Query("roleName") String roleName);
 
-
+    @GET("users/search/all/list")
+    Call<List<User>> getAllStaff(@Header("Authorization") String userToken);
 }

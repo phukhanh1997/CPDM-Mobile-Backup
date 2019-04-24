@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/editText_view_leave_from"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Từ ngày: "/>
+            <EditText
+                android:id="@+id/editText_view_leave_to"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editText_view_leave_from"
+                android:text="Đến ngày: "/>
+            <Button
+                android:id="@+id/btn_view_leave_staff_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Tìm kiếm"/>
+            <ExpandableListView
+                android:id="@+id/expandList_leave_staff"
+                android:layout_width="wrap_content"
+                android:layout_height="500dp"
+                android:layout_below="@id/editText_view_leave_to"></ExpandableListView>
+            <Button
+                android:id="@+id/btn_view_leave_staff_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/expandList_leave_staff"
+                android:text="Đóng"/>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

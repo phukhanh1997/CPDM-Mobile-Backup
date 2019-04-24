@@ -44,4 +44,10 @@ public interface LeaveService {
     @DELETE("leaveRequests/{id}")
     Call<LeaveRequest> deleteLeaveRequest(@Header("Authorization") String userToken,
                                           @Path("id") Integer requestId);
+
+    @GET("leaveRequests/search/findByUserAndDateRange")
+    Call<List<LeaveRequest>> findLeaveRequestOfUser(@Header("Authorization") String userToken,
+                                                    @Query("fromDate") String fromDate,
+                                                    @Query("toDate") String toDate,
+                                                    @Query("userId") Integer userId);
 }

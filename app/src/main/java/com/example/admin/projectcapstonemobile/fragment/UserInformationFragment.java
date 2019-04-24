@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.activity.FragmentActivity;
 import com.example.admin.projectcapstonemobile.adapter.ConfirmLeaveAdapter;
+import com.example.admin.projectcapstonemobile.adapter.LeaveStaffAdapter;
 import com.example.admin.projectcapstonemobile.model.LeaveRequest;
 import com.example.admin.projectcapstonemobile.model.User;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
@@ -32,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
@@ -51,11 +54,14 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
     private EditText edt_take_leave_from;
     private EditText edt_take_leave_to;
     private EditText edt_take_leave_content;
+    private EditText edt_view_leave_from;
+    private EditText edt_view_leave_to;
     private Button btn_dialog_take_leave_confirm;
     private Button btn_dialog_take_leave_cancel;
     private Button btn_confirm_leave_accept;
     private Button btn_confirm_leave_decline;
     private Button btn_confirm_leave_cancel;
+    private Button btn_view_leave_staff_view;
     private TextView textView_confirm_leave_displayName;
     private TextView textView_confirm_leave_fromDate;
     private TextView textView_confirm_leave_toDate;
@@ -63,7 +69,11 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
     private Calendar myCalendar1, myCalendar2, calendarDate, calendarWorking;
     private String dateFromTakeLeave;
     private String dateToTakeLeave;
+    private String dateFromViewLeave;
+    private String dateToViewLeave;
     private int from_year, from_month, from_day,to_year, to_month, to_day;
+    private int view_from_year, view_from_month, view_from_day;
+    private int view_to_year, view_to_month, view_to_day;
     private List<LeaveRequest> listRequest = new ArrayList<>();
     private ListView listView_confirm;
     private Button btn_view_leave_close;
@@ -71,6 +81,7 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
     private String userRole;
     private int FLAG_PICKER = 0;
     private Integer userId;
+    private ExpandableListView listViewStaff;
     //service
     private LeaveService leaveService;
     private UserService userService;
@@ -81,6 +92,8 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
     private List<Calendar> listCalendarWorking = new ArrayList<>();
     private Calendar[] listDisable;
     private Calendar[] listWorking;
+
+    private List<User> listStaff;
     public UserInformationFragment() {
         // Required empty public constructor
     }
@@ -119,8 +132,8 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
             btn_confirm_leave.setText("Xem danh sách xin nghỉ");
         }
         if(userRole.equals("ROLE_MANAGER")){
-            btn_confirm_leave.setText("Duyệt đơn nghỉ phép");
-            btn_show_list_leave.setText("Xem danh sách xin nghỉ");
+            btn_confirm_leave.setText("Xem danh sách xin phép");
+            btn_show_list_leave.setText("Duyệt đơn xin nghỉ");
         }
         //set year, month, day from calendar
 
@@ -162,6 +175,15 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
         textView_confirm_leave_toDate = (TextView) confirm_leave_dialog.findViewById(R.id.textView_confirm_leave_toDate);
         textView_confirm_leave_content = (TextView) confirm_leave_dialog.findViewById(R.id.textView_confirm_leave_content);
 
+        //dialog view leave
+        final Dialog view_leave_staff_dialog = new Dialog(getActivity());
+        view_leave_staff_dialog.setTitle("Xem danh sách nghỉ");
+        view_leave_staff_dialog.setContentView(R.layout.dialog_view_leave_staff);
+
+        edt_view_leave_from = (EditText) view_leave_staff_dialog.findViewById(R.id.editText_view_leave_from);
+        edt_view_leave_to = (EditText) view_leave_staff_dialog.findViewById(R.id.editText_view_leave_to);
+        btn_view_leave_staff_view = (Button) view_leave_staff_dialog.findViewById(R.id.btn_view_leave_staff_view);
+        listViewStaff = (ExpandableListView) view_leave_staff_dialog.findViewById(R.id.expandList_leave_staff);
 
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //on click button take leave
@@ -257,31 +279,31 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
                         System.out.println("DateFromTakeLeave " + dateFromTakeLeave);
                         System.out.println("DateToTakeLeave " + dateToTakeLeave);
 
-                            LeaveRequest leaveRequest = new LeaveRequest(content, dateFromTakeLeave,dateToTakeLeave ,0 , userApprove);
-                            System.out.println("Day la leave request" + leaveRequest.getApprover().getId());
-                            Call<LeaveRequest> call = leaveService.createLeaveRequest(
-                                    "Bearer " + userToken, leaveRequest );
-                            call.enqueue(new Callback<LeaveRequest>() {
-                                @Override
-                                public void onResponse(Call<LeaveRequest> call, Response<LeaveRequest> response) {
-                                    if(response.isSuccessful()){
-                                        Toast.makeText(getActivity(), "Xin nghỉ phép thành công", Toast.LENGTH_SHORT).show();
-                                        UserInformationFragment fragment = new UserInformationFragment();
-                                        Intent intent = new Intent(getActivity(), FragmentActivity.class);
-                                        intent.putExtra("CheckCode", "Checked");
-                                        startActivity(intent);
-                                    }
-                                    else{
-                                        Toast.makeText(getActivity(), "Ngày nghỉ không hợp lệ.", Toast.LENGTH_SHORT).show();
-                                    }
+                        LeaveRequest leaveRequest = new LeaveRequest(content, dateFromTakeLeave,dateToTakeLeave ,0 , userApprove);
+                        System.out.println("Day la leave request" + leaveRequest.getApprover().getId());
+                        Call<LeaveRequest> call = leaveService.createLeaveRequest(
+                                "Bearer " + userToken, leaveRequest );
+                        call.enqueue(new Callback<LeaveRequest>() {
+                            @Override
+                            public void onResponse(Call<LeaveRequest> call, Response<LeaveRequest> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(getActivity(), "Xin nghỉ phép thành công", Toast.LENGTH_SHORT).show();
+                                    UserInformationFragment fragment = new UserInformationFragment();
+                                    Intent intent = new Intent(getActivity(), FragmentActivity.class);
+                                    intent.putExtra("CheckCode", "Checked");
+                                    startActivity(intent);
                                 }
+                                else{
+                                    Toast.makeText(getActivity(), "Ngày nghỉ không hợp lệ.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
 
-                                @Override
-                                public void onFailure(Call<LeaveRequest> call, Throwable t) {
-                                    Toast.makeText(getActivity(), "Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            
+                            @Override
+                            public void onFailure(Call<LeaveRequest> call, Throwable t) {
+                                Toast.makeText(getActivity(), "Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     }
                 });
 
@@ -301,12 +323,68 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
         btn_confirm_leave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listRequest = viewLeaveRequestForUser(userToken, "fromDate,desc", 0);
+                if (listRequest != null) {
+                    listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, view_leave_dialog.getContext()));
+                }
+                view_leave_dialog.show();
+                listView_confirm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Object object = listView_confirm.getItemAtPosition(position);
+                        LeaveRequest leaveRequest = (LeaveRequest) object;
+                        textView_confirm_leave_displayName.setText("Tên nhân viên \n" + leaveRequest.getUser().getDisplayName());
+                        String fromDate = leaveRequest.getFromDate();
+                        String[] fromDateArray = fromDate.split("-");
+                        textView_confirm_leave_fromDate.setText("Nghỉ từ ngày " + fromDateArray[2] + "/" + fromDateArray[1] + "/" + fromDateArray[0]);
+                        String toDate = leaveRequest.getToDate();
+                        String[] toDateArray = toDate.split("-");
+                        textView_confirm_leave_toDate.setText("Nghỉ đến ngày " + toDateArray[2] + "/" + toDateArray[1] + "/" + toDateArray[0]);
+                        textView_confirm_leave_content.setText(leaveRequest.getContent());
+                        confirm_leave_dialog.show();
+
+                        btn_confirm_leave_decline.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                deleteLeaveRequest(userToken, leaveRequest.getId());
+                                Toast.makeText(getActivity(), "Hủy đơn xin nghỉ thành công", Toast.LENGTH_SHORT).show();
+                                confirm_leave_dialog.dismiss();
+                                listRequest = viewLeaveRequestForUser(userToken, "fromDate,desc", 0);
+                                if (listRequest != null) {
+                                    listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, view_leave_dialog.getContext()));
+                                }
+                                view_leave_dialog.show();
+                            }
+                        });
+
+                        btn_confirm_leave_accept.setVisibility(View.INVISIBLE);
+
+                        btn_confirm_leave_cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                confirm_leave_dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+
+                btn_view_leave_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view_leave_dialog.dismiss();
+                    }
+                });
+            }
+        });
+
+        btn_show_list_leave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if(userRole.equals("ROLE_MANAGER")) {
                     listRequest = viewLeaveRequestForApprover(userToken, "fromDate,desc", 0);
                     if (listRequest != null) {
                         listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, view_leave_dialog.getContext()));
                         for(int i=0; i<listRequest.size();i++){
-                            System.out.println("Day la fromdate, desc");
                             System.out.println(listRequest.get(i).getFromDate());
                         }
                     }
@@ -365,62 +443,89 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
                         }
                     });
                 }
-                if(userRole.equals("ROLE_STAFF")){
-                    listRequest = viewLeaveRequestForUser(userToken, "fromDate,desc", 0);
-                    if (listRequest != null) {
-                        listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, view_leave_dialog.getContext()));
-                    }
-                    view_leave_dialog.show();
-                    listView_confirm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                if(userRole.equals("ROLE_ADMIN")){
+                    view_leave_staff_dialog.show();
+                    listStaff = getAllStaff(userToken);
+
+                    Calendar now = Calendar.getInstance();
+                    int year = now.get(Calendar.YEAR);
+                    Calendar min = Calendar.getInstance();
+                    min.set(year, 0, 1);
+                    edt_view_leave_from.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Object object = listView_confirm.getItemAtPosition(position);
-                            LeaveRequest leaveRequest = (LeaveRequest) object;
-                            textView_confirm_leave_displayName.setText("Tên nhân viên \n" + leaveRequest.getUser().getDisplayName());
-                            String fromDate = leaveRequest.getFromDate();
-                            String[] fromDateArray = fromDate.split("-");
-                            textView_confirm_leave_fromDate.setText("Nghỉ từ ngày " + fromDateArray[2] + "/" + fromDateArray[1] + "/" + fromDateArray[0]);
-                            String toDate = leaveRequest.getToDate();
-                            String[] toDateArray = toDate.split("-");
-                            textView_confirm_leave_toDate.setText("Nghỉ đến ngày " + toDateArray[2] + "/" + toDateArray[1] + "/" + toDateArray[0]);
-                            textView_confirm_leave_content.setText(leaveRequest.getContent());
-                            confirm_leave_dialog.show();
-
-                            btn_confirm_leave_decline.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    deleteLeaveRequest(userToken, leaveRequest.getId());
-                                    Toast.makeText(getActivity(), "Hủy đơn xin nghỉ thành công", Toast.LENGTH_SHORT).show();
-                                    confirm_leave_dialog.dismiss();
-                                    listRequest = viewLeaveRequestForUser(userToken, "fromDate,desc", 0);
-                                    if (listRequest != null) {
-                                        listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, view_leave_dialog.getContext()));
-                                    }
-                                    view_leave_dialog.show();
-                                }
-                            });
-
-                            btn_confirm_leave_accept.setVisibility(View.INVISIBLE);
-
-                            btn_confirm_leave_cancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    confirm_leave_dialog.dismiss();
-                                }
-                            });
+                        public void onClick(View v) {
+                            FLAG_PICKER=2;
+                            DatePickerDialog dialogFrom = DatePickerDialog.newInstance(
+                                    UserInformationFragment.this,
+                                    view_from_year,
+                                    view_from_month,
+                                    view_from_day);
+                            dialogFrom.setMinDate(min);
+                            dialogFrom.setMaxDate(now);
+                            dialogFrom.show(getFragmentManager(), "DialogFrom");
+                            dateFromViewLeave= view_from_year + "/" + view_from_month + "/" + view_from_day;
                         }
                     });
-                }
+                    edt_view_leave_to.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FLAG_PICKER=3;
+                            DatePickerDialog dialogFrom = DatePickerDialog.newInstance(
+                                    UserInformationFragment.this,
+                                    view_to_year,
+                                    view_to_month,
+                                    view_to_day);
+                            dialogFrom.setMinDate(min);
+                            dialogFrom.setMaxDate(now);
+                            dialogFrom.show(getFragmentManager(), "DialogFrom");
+                            dateToViewLeave= view_to_year + "/" + view_to_month + "/" + view_to_day;
+                        }
+                    });
+                    btn_view_leave_staff_view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            List<String> listHeader = new ArrayList<>();
+                            listHeader.add("khanhnp");
+                            listHeader.add("quang");
+                            listHeader.add("queo");
+                            HashMap<String, List<LeaveRequest>> listDataChild = new HashMap<>();
 
-                btn_view_leave_close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view_leave_dialog.dismiss();
-                    }
-                });
+                            for(int i=0; i< listStaff.size(); i++){
+                                String header = listStaff.get(i).getDisplayName() + "-" + listStaff.get(i).getDepartment().getName();
+                                listHeader.add(header);
+                                System.out.println("Day la header " + header + " id " + listStaff.get(i).getId());
+                            }
+
+                            for(int i=0; i< listStaff.size(); i++){
+                                List<LeaveRequest> leaveRequests = new ArrayList<>();
+                                leaveRequests = viewLeaveRequestForAdmin(userToken, dateFromViewLeave,
+                                        dateToViewLeave, listStaff.get(i).getId());
+                                if(leaveRequests!=null){
+                                    System.out.println("Leave req cua " + listStaff.get(i).getDisplayName()
+                                            + " va noi dung la " + leaveRequests.get(i).getContent());
+                                    listDataChild.put(listHeader.get(i), leaveRequests);
+                                }
+                                System.out.println("Day la list staff" + listStaff
+                                        .get(i).getDisplayName() + "id la " + listStaff.get(i).getId());
+                            }
+//                            List<LeaveRequest> list1 = viewLeaveRequestForAdmin(userToken, "2019-01-01",
+//                                    "2019-04-01", 1);
+//                            List<LeaveRequest> list2 = viewLeaveRequestForAdmin(userToken, "2019-01-01",
+//                                    "2019-04-01", 2);
+//                            List<LeaveRequest> list3 = viewLeaveRequestForAdmin(userToken, "2019-01-01",
+//                                    "2019-04-01", 3);
+//                            listDataChild.put(listHeader.get(0), list1);
+//                            listDataChild.put(listHeader.get(1), list2);
+//                            listDataChild.put(listHeader.get(2), list3);
+                            if(listStaff!=null){
+                                listViewStaff.setAdapter(new LeaveStaffAdapter(listHeader, listDataChild, getActivity()));
+                            }
+                        }
+                    });
+
+                }
             }
         });
-
 
 
 
@@ -429,6 +534,9 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
     }
     private User getApprover(String userToken){
         String roleName = "ROLE_MANAGER";
+        if(userRole.equals("ROLE_MANAGER")){
+            roleName = "ROLE_ADMIN";
+        }
         List<User> approver = new ArrayList<>();
         Call<List<User>> call = userService.getApprover("Bearer " + userToken, roleName);
         try {
@@ -491,6 +599,46 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
             }
             System.out.println("Xin thong bao day la2 " + dateToTakeLeave);
         }
+        if(FLAG_PICKER==2){
+            edt_view_leave_from.setText("Từ ngày " + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+            if(monthOfYear<9){
+                if(dayOfMonth<10){
+                    dateFromViewLeave = year + "-0" + (monthOfYear+1) + "-0" + dayOfMonth;
+                }
+                else{
+                    dateFromViewLeave = year + "-0" + (monthOfYear+1) + "-" + dayOfMonth;
+                }
+            }
+            else{
+                if(dayOfMonth<10){
+                    dateFromViewLeave = year + "-" + (monthOfYear+1) + "-0" + dayOfMonth;
+                }
+                else{
+                    dateFromViewLeave = year + "-" + (monthOfYear+1) + "-" + dayOfMonth;
+                }
+            }
+            System.out.println("Xin thong bao day la3 " + dateFromViewLeave);
+        }
+        if(FLAG_PICKER==3){
+            edt_view_leave_to.setText("Đến ngày " + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+            if(monthOfYear<9){
+                if(dayOfMonth<10){
+                    dateToViewLeave = year + "-0" + (monthOfYear+1) + "-0" + dayOfMonth;
+                }
+                else{
+                    dateToViewLeave = year + "-0" + (monthOfYear+1) + "-" + dayOfMonth;
+                }
+            }
+            else{
+                if(dayOfMonth<10){
+                    dateToViewLeave = year + "-" + (monthOfYear+1) + "-0" + dayOfMonth;
+                }
+                else{
+                    dateToViewLeave = year + "-" + (monthOfYear+1) + "-" + dayOfMonth;
+                }
+            }
+            System.out.println("Xin thong bao day la4 " + dateToViewLeave);
+        }
     }
     private Calendar dateToCalendar(Date date){
         Calendar calendar = Calendar.getInstance();
@@ -521,7 +669,7 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
     private List<LeaveRequest> viewLeaveRequestForApprover(String userToken, String sort, Integer status){
         List<LeaveRequest> leaveRequests = new ArrayList<>();
         Call<List<LeaveRequest>> call = leaveService.findLeaveRequestByApprover(
-                            "Bearer " + userToken, sort, status);
+                "Bearer " + userToken, sort, status);
 
         try {
             leaveRequests = call.execute().body();
@@ -531,9 +679,9 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
         return leaveRequests;
     }
     private void updateLeaveRequest(String userToken, Integer requestId,
-                                            LeaveRequest leaveRequest){
+                                    LeaveRequest leaveRequest){
         Call<LeaveRequest> call = leaveService.updateStatusRequest("Bearer " + userToken,
-                                                                    requestId, leaveRequest);
+                requestId, leaveRequest);
         try {
             leaveRequest = call.execute().body();
         } catch (IOException e) {
@@ -543,7 +691,7 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
     private List<LeaveRequest> viewLeaveRequestForUser(String userToken, String sort, Integer status){
         List<LeaveRequest> leaveRequests = new ArrayList<>();
         Call<List<LeaveRequest>> call = leaveService.findLeaveRequestByUser(
-                                        "Bearer " + userToken, sort, status);
+                "Bearer " + userToken, sort, status);
         try {
             leaveRequests = call.execute().body();
         } catch (IOException e) {
@@ -558,5 +706,28 @@ public class UserInformationFragment extends Fragment implements com.wdullaer.ma
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private List<User> getAllStaff(String userToken){
+        List<User> listStaff = new ArrayList<>();
+        Call<List<User>> call = userService.getAllStaff("Bearer " + userToken);
+        try {
+            listStaff = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return listStaff;
+    }
+    private List<LeaveRequest> viewLeaveRequestForAdmin(String userToken, String fromDate,
+                                                        String toDate, Integer userId){
+        List<LeaveRequest> leaveRequests = new ArrayList<>();
+        Call<List<LeaveRequest>> call =
+                leaveService.findLeaveRequestOfUser("Bearer " + userToken, fromDate,
+                        toDate, userId);
+        try {
+            leaveRequests = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return leaveRequests;
     }
 }

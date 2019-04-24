@@ -34,7 +34,7 @@ import retrofit2.Call;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AssignedTaskFragment extends Fragment {
+public class AssignedTaskFragment extends Fragment{
     private final String userInformationSharedPreferences = "informationSharedPreferences";
     private TaskService taskService;
     private List<Task> tasks;

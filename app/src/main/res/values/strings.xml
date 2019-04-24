@@ -11,4 +11,11 @@
     <string name="menu_created_task">Task đã tạo</string>
     <string name="menu_take_leave">Xin nghỉ phép</string>
     <string name="menu_leave_list">Xem danh sách nghỉ phép</string>
+    <string name="menu_home">Trang chủ</string>
+    <string name="menu_gallery">Hình ảnh</string>
+    <string name="menu_slideshow">Slide</string>
+    <string name="menu_share">Chia sẻ</string>
+    <string name="menu_tools">Chỉnh sửa</string>
+    <string name="menu_send">Gửi</string>
+    <string name="action_settings">Action settings</string>
 </resources>
