@@ -47,7 +47,7 @@ import retrofit2.Response;
 public class TaskDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String userInformationSharedPreferences = "informationSharedPreferences";
-    private TextView txt_createdBy;
+    //    private TextView txt_createdBy;
     private TextView txt_from;
     private TextView txt_to;
     private TextView txt_taskTitle;
@@ -86,7 +86,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setTitle("Mô tả công việc");
-        txt_createdBy = (TextView) findViewById(R.id.textView_taskDetail_createdBy);
+//        txt_createdBy = (TextView) findViewById(R.id.textView_taskDetail_createdBy);
         txt_from = (TextView) findViewById(R.id.textView_taskDetail_timeStart);
         txt_to = (TextView) findViewById(R.id.textView_taskDetail_timeEnd);
         txt_taskTitle = (TextView) findViewById(R.id.textView_taskDetail_taskTitle);
@@ -120,7 +120,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         //load task information
         taskId = (Integer) getIntent().getSerializableExtra("taskId");
         Task task = getTaskDetail(userToken, taskId);
-        txt_createdBy.setText(task.getCreator().getDisplayName());
+//        txt_createdBy.setText(task.getCreator().getDisplayName());
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date dateStart = new Date();
         dateStart = task.getStartTime();

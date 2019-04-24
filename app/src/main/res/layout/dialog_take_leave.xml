@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <EditText
         android:id="@+id/editText_take_leave_date_from"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:text="Nghỉ từ ngày "
-        android:focusable="false"/>
+        android:focusable="false"
+        android:text="Nghỉ từ ngày " />
 
     <EditText
         android:id="@+id/editText_take_leave_date_to"
@@ -20,9 +20,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="103dp"
-        android:focusable="false"
         android:clickable="true"
-        android:text="Nghỉ đến ngày "/>
+        android:focusable="false"
+        android:text="Nghỉ đến ngày " />
 
     <TextView
         android:layout_width="122dp"
