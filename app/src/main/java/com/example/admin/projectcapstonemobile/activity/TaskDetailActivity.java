@@ -73,7 +73,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
     private Button btn_dialog_comment_confirm;
     private Button btn_dialog_comment_cancel;
     private Button btn_confirm_change_status;
-//    private Button btnChangeStatus;
+    //    private Button btnChangeStatus;
     private Button btn_cancel_change_status;
     private LinearLayout mImgBack;
     private LinearLayout mLnlChangeStatus;
@@ -96,6 +96,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         mLnlChangeStatus = findViewById(R.id.linear_layout_change_status);
 //        btnChangeStatus = findViewById(R.id.btn_task_detail_change_status);
         listView_taskIssue = (ExpandableListView) findViewById(R.id.listView_taskIssue);
+        listView_taskIssue.setNestedScrollingEnabled(false);
         //dialog
         commentDialog = new Dialog(TaskDetailActivity.this);
         commentDialog.setTitle("Chỉnh sửa bình luận");
@@ -111,6 +112,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         taskService = ApiUtils.getTaskService();
         userService = ApiUtils.getUserService();
         listView_comment = (ListView) findViewById(R.id.listComment);
+        listView_comment.setNestedScrollingEnabled(false);
         //userToken = (String) getIntent().getSerializableExtra("UserToken");
         final SharedPreferences sharedPreferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
@@ -288,7 +290,6 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         mImgBack.setOnClickListener(this);
 
 
-
     }
 
     private List<Comment> getAllCommentByTaskId(Integer taskId) {
@@ -389,7 +390,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.linear_layout_back:
                 TaskDetailActivity.this.finish();
                 break;

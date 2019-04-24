@@ -11,4 +11,7 @@
     <string name="menu_created_task">Task đã tạo</string>
     <string name="menu_take_leave">Xin nghỉ phép</string>
     <string name="menu_leave_list">Xem danh sách nghỉ phép</string>
+    <string name="action_settings">Xem danh sách nghỉ phép</string>
+
+
 </resources>

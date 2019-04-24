@@ -4,14 +4,15 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="blue">#0060bf</color>
+    <color name="deep_blue">#0060bf</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="black_two">#5A5A5A</color>
     <color name="pale_grey_three">#88888B</color>
     <color name="pale_grey_two">#f1f3f6</color>
     <color name="pale_grey">#D3D4DA</color>
-    <color name="light_blue">#d7e7f5</color>
+    <color name="light_blue">#D1E1EE</color>
+    <color name="blue">#d7e7f5</color>
     <color name="charcoal">#363e2e</color>
     <color name="success">#00B100</color>
     <color name="grey">#999999</color>

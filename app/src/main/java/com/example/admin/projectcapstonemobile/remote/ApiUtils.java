@@ -3,7 +3,7 @@ package com.example.admin.projectcapstonemobile.remote;
 
 
 public class ApiUtils {
-    public static final String BASE_UTL = "http://192.168.1.5:8080/";
+    public static final String BASE_UTL = "http://192.168.0.167:8080/";
 
     public static TaskService getTaskService(){
         return RetrofitClient.getClient(BASE_UTL).create(TaskService.class);

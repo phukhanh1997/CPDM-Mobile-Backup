@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call<ResObject> call, Response<ResObject> response) {
                         if (response.isSuccessful()) {
                             userToken = response.body().getToken();
-                            Intent intent = new Intent(LoginActivity.this, FragmentActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             //decode token
                             //get username
                             JWT parsedJWT = new JWT(userToken);
@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                             editor.commit();
 
                             startActivity(intent);
+                            LoginActivity.this.finish();
                         } else {
                             Toast.makeText(LoginActivity.this, "Wrong username or password!", Toast.LENGTH_SHORT).show();
                         }

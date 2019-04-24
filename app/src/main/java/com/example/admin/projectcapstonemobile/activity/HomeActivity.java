@@ -26,20 +26,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         initialView();
         initialData();
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new AssignedTaskFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_assginedTask);
-        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new AssignedTaskFragment()).commit();
+        navigationView.setCheckedItem(R.id.nav_assginedTask);
     }
 
-    private void initialView(){
+    private void initialView() {
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -47,13 +50,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void initialData(){
+    private void initialData() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_open);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
     }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
