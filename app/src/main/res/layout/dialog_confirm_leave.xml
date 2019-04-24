@@ -1,74 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/textView_confirm_leave_displayName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tên nhân viên"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pale_grey_four"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView_confirm_leave_fromDate"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="38dp"
-        android:text="Nghỉ từ ngày" />
+        android:layout_marginTop="@dimen/dp16"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView_confirm_leave_toDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView_confirm_leave_fromDate"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="80dp"
-        android:text="Nghỉ đến ngày" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp4"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView_confirm_leave_fromDate"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="126dp"
-        android:text="Nội dung cụ thể: " />
 
-    <TextView
-        android:id="@+id/textView_confirm_leave_content"
-        android:layout_width="314dp"
-        android:layout_height="246dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="190dp"
-        android:text="Con cò be bé" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp16"
+                android:text="Chi tiết"
+                android:textColor="@color/charcoal"
+                android:textSize="@dimen/sp17"
+                android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btn_confirm_leave_accept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:text="Duyệt" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp30"
+                android:layout_marginTop="@dimen/dp4"
+                android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btn_confirm_leave_decline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/btn_confirm_leave_accept"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="100dp"
-        android:text="Xóa" />
-    <Button
-        android:id="@+id/btn_confirm_leave_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btn_confirm_leave_accept"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="30dp"
-        android:text="Đóng" />
-</RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tên nhân viên: "
+                    android:textColor="@color/pale_grey_three"
+                    android:textSize="@dimen/sp16" />
+
+                <TextView
+                    android:id="@+id/textView_confirm_leave_displayName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:text="KhanhKT"
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/sp16" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp30"
+                android:layout_marginTop="@dimen/dp4"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nghỉ từ ngày: "
+                    android:textColor="@color/pale_grey_three"
+                    android:textSize="@dimen/sp16" />
+
+                <TextView
+                    android:id="@+id/textView_confirm_leave_fromDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:text="20/11/2012"
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/sp16" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp30"
+                android:layout_marginTop="@dimen/dp4"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nghỉ đến ngày: "
+                    android:textColor="@color/pale_grey_three"
+                    android:textSize="@dimen/sp16" />
+
+                <TextView
+                    android:id="@+id/textView_confirm_leave_toDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:text="22/11/2012"
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/sp16" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dp8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp16"
+                android:text="Nội dung"
+                android:textColor="@color/charcoal"
+                android:textSize="@dimen/sp17"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/textView_confirm_leave_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp30"
+                android:layout_marginTop="@dimen/dp6"
+                android:layout_marginRight="@dimen/dp16"
+                android:layout_marginBottom="@dimen/dp8"
+                android:minHeight="@dimen/dp200"
+                android:textColor="@color/charcoal"
+                android:textSize="@dimen/sp16"
+                tools:text="Con cò be bé" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_confirm_leave_accept"
+                android:layout_width="@dimen/dp140"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp8"
+                android:background="@color/white"
+                android:text="Duyệt"
+                android:textColor="@color/charcoal"
+                android:textSize="@dimen/sp16" />
+
+            <Button
+                android:id="@+id/btn_confirm_leave_decline"
+                android:layout_width="@dimen/dp140"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp8"
+                android:background="@color/white"
+                android:text="Xóa"
+                android:textColor="@color/charcoal"
+                android:textSize="@dimen/sp16" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_confirm_leave_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/btn_confirm_leave_accept"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="30dp"
+            android:text="Đóng"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</FrameLayout>

@@ -2,6 +2,7 @@ package com.example.admin.projectcapstonemobile.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.os.Bundle;
@@ -77,6 +78,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
     private Button btn_cancel_change_status;
     private LinearLayout mImgBack;
     private LinearLayout mLnlChangeStatus;
+    private LinearLayout mLnlViewAllComments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,8 +290,8 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
 
         mImgBack = findViewById(R.id.linear_layout_back);
         mImgBack.setOnClickListener(this);
-
-
+        mLnlViewAllComments = findViewById(R.id.linear_layout_view_all_comments);
+        mLnlViewAllComments.setOnClickListener(this);
     }
 
     private List<Comment> getAllCommentByTaskId(Integer taskId) {
@@ -393,6 +395,10 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.linear_layout_back:
                 TaskDetailActivity.this.finish();
+                break;
+            case R.id.linear_layout_view_all_comments:
+                Intent intent = new Intent(TaskDetailActivity.this, CommentActivity.class);
+                startActivity(intent);
                 break;
         }
     }

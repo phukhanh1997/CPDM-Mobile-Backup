@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.CommentActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/blue">
+
+            <LinearLayout
+                android:id="@+id/linear_layout_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="@dimen/dp16"
+                android:background="@drawable/button_back"
+                android:padding="@dimen/dp10">
+
+                <ImageView
+                    android:layout_width="@dimen/dp12"
+                    android:layout_height="@dimen/dp12"
+                    android:src="@mipmap/ic_back" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Danh sách bình luận"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp18" />
+
+        </FrameLayout>
+
+        <ListView
+            android:id="@+id/listComment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="top"
+            android:layout_marginBottom="@dimen/dp60"></ListView>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:background="@color/pale_grey"></FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp12">
+
+            <EditText
+                android:id="@+id/edtText_task_detail_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginRight="@dimen/dp86"
+                android:background="@android:color/transparent"
+                android:hint="Nội dung" />
+
+            <Button
+                android:id="@+id/btn_task_detail_send_comment"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp26"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="@dimen/dp2"
+                android:layout_marginBottom="@dimen/dp2"
+                android:background="@color/white"
+                android:text="Bình luận"
+                android:textAllCaps="false"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/sp14" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+</FrameLayout>

@@ -236,7 +236,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp1"
                     android:layout_marginTop="@dimen/dp16"
-                    android:layout_marginBottom="@dimen/dp16"
+                    android:layout_marginBottom="@dimen/dp8"
                     android:background="@color/pale_grey"></FrameLayout>
 
                 <LinearLayout
@@ -244,14 +244,30 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/linear_layout_view_all_comments"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp6"
-                        android:text="Bình luận"
-                        android:textColor="@color/charcoal"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/dp8"
+                        android:paddingBottom="@dimen/dp8">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bình luận"
+                            android:textColor="@color/charcoal"
+                            android:textSize="@dimen/sp16"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="Xem tất cả"
+                            android:textColor="@color/charcoal"
+                            android:textSize="@dimen/sp16" />
+                    </LinearLayout>
 
                     <ListView
                         android:id="@+id/listComment"
@@ -265,48 +281,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp1"
-            android:background="@color/pale_grey"></FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dp12">
-
-            <EditText
-                android:id="@+id/edtText_task_detail_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginRight="@dimen/dp86"
-                android:background="@android:color/transparent"
-                android:hint="Nội dung" />
-
-            <Button
-                android:id="@+id/btn_task_detail_send_comment"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp26"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="@dimen/dp2"
-                android:layout_marginBottom="@dimen/dp2"
-                android:background="@color/white"
-                android:text="Bình luận"
-                android:textAllCaps="false"
-                android:textColor="@color/blue"
-                android:textSize="@dimen/sp14" />
-
-        </FrameLayout>
-
-    </FrameLayout>
 
 </FrameLayout>
