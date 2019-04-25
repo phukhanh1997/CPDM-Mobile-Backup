@@ -10,6 +10,4 @@
         android:id="@+id/listView_view_leave_request_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></ListView>
-
-
 </FrameLayout>

@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.fragment.AssignedTaskFragment;
 import com.example.admin.projectcapstonemobile.fragment.CreatedTaskFragment;
+import com.example.admin.projectcapstonemobile.fragment.TakeLeaveFragment;
+import com.example.admin.projectcapstonemobile.fragment.ViewLeaveRequestFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -79,10 +81,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         new CreatedTaskFragment()).commit();
                 break;
             case R.id.nav_take_leave:
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new TakeLeaveFragment()).commit();
                 break;
             case R.id.nav_take_leave_list:
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ViewLeaveRequestFragment()).commit();
                 break;
         }
 

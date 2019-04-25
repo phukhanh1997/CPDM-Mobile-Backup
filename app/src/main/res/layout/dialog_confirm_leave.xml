@@ -150,7 +150,7 @@
 
             <Button
                 android:id="@+id/btn_confirm_leave_accept"
-                android:layout_width="@dimen/dp140"
+                android:layout_width="@dimen/dp100"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dp8"
                 android:background="@color/white"
@@ -160,25 +160,23 @@
 
             <Button
                 android:id="@+id/btn_confirm_leave_decline"
-                android:layout_width="@dimen/dp140"
+                android:layout_width="@dimen/dp100"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp8"
                 android:background="@color/white"
                 android:text="Xóa"
                 android:textColor="@color/charcoal"
                 android:textSize="@dimen/sp16" />
-
+            <Button
+                android:id="@+id/btn_confirm_leave_cancel"
+                android:layout_width="@dimen/dp100"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp8"
+                android:background="@color/white"
+                android:text="Đóng"
+                android:textColor="@color/charcoal"
+                android:textSize="@dimen/sp16" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_confirm_leave_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/btn_confirm_leave_accept"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="30dp"
-            android:text="Đóng"
-            android:visibility="gone" />
     </LinearLayout>
 
 </FrameLayout>
