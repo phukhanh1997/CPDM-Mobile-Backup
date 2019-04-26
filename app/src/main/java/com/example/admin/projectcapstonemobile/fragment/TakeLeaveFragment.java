@@ -13,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.activity.FragmentActivity;
 import com.example.admin.projectcapstonemobile.model.LeaveRequest;
 import com.example.admin.projectcapstonemobile.model.User;
+import com.example.admin.projectcapstonemobile.model.YearSummary;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.LeaveService;
 import com.example.admin.projectcapstonemobile.remote.UserService;
@@ -60,6 +62,10 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
     private EditText edt_take_leave_content;
     private String dateFromTakeLeave;
     private String dateToTakeLeave;
+    private YearSummary summary;
+    private TextView totalDay;
+    private TextView usedDay;
+    private TextView availableDay;
     public TakeLeaveFragment() {
         // Required empty public constructor
     }
@@ -96,6 +102,10 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
         btn_dialog_take_leave_confirm = view.findViewById(R.id.btn_dialog_take_leave_confirm);
         btn_dialog_take_leave_cancel = view.findViewById(R.id.btn_dialog_take_leave_cancel);
 
+        totalDay = (TextView) view.findViewById(R.id.textView_take_leave_totalDay);
+        usedDay = (TextView) view.findViewById(R.id.textView_take_leave_usedDay);
+        availableDay = (TextView) view.findViewById(R.id.textView_take_leave_availableDay);
+
         from_year = myCalendar1.get(Calendar.YEAR);
         from_month = myCalendar1.get(Calendar.MONTH);
         from_day = myCalendar1.get(Calendar.DAY_OF_MONTH);
@@ -122,6 +132,10 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
             }
         }
 
+        int year = now.get(Calendar.YEAR);
+        summary = getSummary(year);
+        usedDay.setText("Số ngày nghỉ đã sử dụng: " + summary.getDayOffApproved());
+        availableDay.setText("Số ngày nghỉ còn lại: " + summary.getDayOffRemain());
 
         //
         java.util.Date dateWorking = null;
@@ -289,6 +303,18 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
             e.printStackTrace();
         }
         return listDate;
+    }
+
+    private YearSummary getSummary(Integer year){
+        YearSummary summary = new YearSummary();
+        Call<YearSummary> call = leaveService.getSummary("Bearer " + userToken, year);
+
+        try {
+            summary = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return summary;
     }
 
     @Override

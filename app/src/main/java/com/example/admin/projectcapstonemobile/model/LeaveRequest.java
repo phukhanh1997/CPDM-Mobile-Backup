@@ -12,6 +12,19 @@ public class LeaveRequest implements Serializable {
     private User user;
     private User approver;
     private String createdDate;
+    private Integer dayOff;
+
+    public LeaveRequest(Integer id, String content, String fromDate, String toDate, Integer status, User user, User approver, String createdDate, Integer dayOff) {
+        this.id = id;
+        this.content = content;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+        this.status = status;
+        this.user = user;
+        this.approver = approver;
+        this.createdDate = createdDate;
+        this.dayOff = dayOff;
+    }
 
     public LeaveRequest(Integer id, String content, String fromDate, String toDate, Integer status, User user, User approver, String createdDate) {
         this.id = id;
@@ -104,5 +117,13 @@ public class LeaveRequest implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getDayOff() {
+        return dayOff;
+    }
+
+    public void setDayOff(Integer dayOff) {
+        this.dayOff = dayOff;
     }
 }

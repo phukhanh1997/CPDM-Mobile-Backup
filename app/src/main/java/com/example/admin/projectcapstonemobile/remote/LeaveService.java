@@ -1,6 +1,7 @@
 package com.example.admin.projectcapstonemobile.remote;
 
 import com.example.admin.projectcapstonemobile.model.LeaveRequest;
+import com.example.admin.projectcapstonemobile.model.YearSummary;
 
 import java.util.List;
 
@@ -44,4 +45,12 @@ public interface LeaveService {
     @DELETE("leaveRequests/{id}")
     Call<LeaveRequest> deleteLeaveRequest(@Header("Authorization") String userToken,
                                           @Path("id") Integer requestId);
+
+    @GET("leaveRequests/search/findYearSummary")
+    Call<YearSummary> findLeaveRequestOfUser(@Header("Authorization") String userToken,
+                                                    @Query("userId") Integer userId,
+                                                    @Query("year") Integer year);
+    @GET("leaveRequests/search/findYearSummary/self")
+    Call<YearSummary> getSummary(@Header("Authorization") String userToken,
+                                 @Query("year") Integer year);
 }

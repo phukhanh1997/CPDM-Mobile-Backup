@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.ViewLeaveStaffFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <EditText
+                    android:id="@+id/editText_view_leave_from_year"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:text="Năm: "/>
+                <Button
+                    android:id="@+id/btn_view_leave_staff_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="Tìm kiếm"/>
+                <ExpandableListView
+                    android:paddingLeft="@dimen/dp15"
+                    android:id="@+id/expandList_leave_staff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="500dp"
+                    android:layout_below="@id/editText_view_leave_from_year"></ExpandableListView>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

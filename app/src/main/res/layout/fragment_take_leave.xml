@@ -60,6 +60,49 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp4"
+            android:background="@color/white"
+            android:layout_marginLeft="@dimen/dp16"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_take_leave_totalDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp6"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="Số ngày nghỉ tối đa một năm: 12 ngày"
+                android:textColor="@color/charcoal"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView_take_leave_usedDay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp6"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="Số ngày nghỉ đã sử dụng trong năm: "
+                android:textColor="@color/charcoal"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView_take_leave_availableDay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp6"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="Số ngày nghỉ còn lại: "
+                android:textColor="@color/charcoal"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
             android:background="@color/white"
             android:minHeight="@dimen/dp200"

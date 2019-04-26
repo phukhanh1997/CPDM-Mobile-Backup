@@ -16,6 +16,7 @@ import com.example.admin.projectcapstonemobile.fragment.AssignedTaskFragment;
 import com.example.admin.projectcapstonemobile.fragment.CreatedTaskFragment;
 import com.example.admin.projectcapstonemobile.fragment.TakeLeaveFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewLeaveRequestFragment;
+import com.example.admin.projectcapstonemobile.fragment.ViewLeaveStaffFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,7 +50,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     private void initialData() {
@@ -87,6 +87,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_take_leave_list:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new ViewLeaveRequestFragment()).commit();
+                break;
+            case R.id.nav_view_staff_leave:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ViewLeaveStaffFragment()).commit();
                 break;
         }
 
