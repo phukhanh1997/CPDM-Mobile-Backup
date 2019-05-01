@@ -121,6 +121,8 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
                 try {
                     call.execute().body();
                     holder.taskIssueStatus.setText("Hoàn thành");
+                    holder.imgStatus.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_checked));
+                    holder.buttonFinish.setVisibility(View.INVISIBLE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

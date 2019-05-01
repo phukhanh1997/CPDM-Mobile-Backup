@@ -66,7 +66,7 @@ public class ViewLeaveRequestFragment extends Fragment {
         userRole = sharedPreferences.getString("userRole", "");
         //dialog confirm leave
         final Dialog confirm_leave_dialog = new Dialog(getActivity());
-        confirm_leave_dialog.setTitle("Duyệt đơn xin nghỉ");
+        confirm_leave_dialog.setTitle("Quản lý đơn xin nghỉ");
         confirm_leave_dialog.setContentView(R.layout.dialog_confirm_leave);
 
         btn_confirm_leave_accept = (Button) confirm_leave_dialog.findViewById(R.id.btn_confirm_leave_accept);
@@ -77,48 +77,124 @@ public class ViewLeaveRequestFragment extends Fragment {
         textView_confirm_leave_toDate = (TextView) confirm_leave_dialog.findViewById(R.id.textView_confirm_leave_toDate);
         textView_confirm_leave_content = (TextView) confirm_leave_dialog.findViewById(R.id.textView_confirm_leave_content);
 
-        listRequest = viewLeaveRequestForUser(userToken, "fromDate,desc", 0);
-        if (listRequest != null) {
-            listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, getActivity()));
-        }
-        listView_confirm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object object = listView_confirm.getItemAtPosition(position);
-                LeaveRequest leaveRequest = (LeaveRequest) object;
-                textView_confirm_leave_displayName.setText(leaveRequest.getUser().getDisplayName());
-                String fromDate = leaveRequest.getFromDate();
-                String[] fromDateArray = fromDate.split("-");
-                textView_confirm_leave_fromDate.setText(fromDateArray[2] + "/" + fromDateArray[1] + "/" + fromDateArray[0]);
-                String toDate = leaveRequest.getToDate();
-                String[] toDateArray = toDate.split("-");
-                textView_confirm_leave_toDate.setText(toDateArray[2] + "/" + toDateArray[1] + "/" + toDateArray[0]);
-                textView_confirm_leave_content.setText(leaveRequest.getContent());
-                confirm_leave_dialog.show();
 
-                btn_confirm_leave_decline.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deleteLeaveRequest(userToken, leaveRequest.getId());
-                        Toast.makeText(getActivity(), "Hủy đơn xin nghỉ thành công", Toast.LENGTH_SHORT).show();
-                        confirm_leave_dialog.dismiss();
-                        listRequest = viewLeaveRequestForUser(userToken, "fromDate,desc", 0);
-                        if (listRequest != null) {
-                            listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest,getActivity()));
-                        }
-                    }
-                });
-
-                btn_confirm_leave_accept.setVisibility(View.INVISIBLE);
-
-                btn_confirm_leave_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        confirm_leave_dialog.dismiss();
-                    }
-                });
+        if(!userRole.equals("ROLE_ADMIN")){
+            listRequest = viewLeaveRequestForUser(userToken, "fromDate,desc", 0);
+            if (listRequest != null) {
+                listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, getActivity()));
             }
-        });
+            listView_confirm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Object object = listView_confirm.getItemAtPosition(position);
+                    LeaveRequest leaveRequest = (LeaveRequest) object;
+                    textView_confirm_leave_displayName.setText(leaveRequest.getUser().getDisplayName());
+                    String fromDate = leaveRequest.getFromDate();
+                    String[] fromDateArray = fromDate.split("-");
+                    textView_confirm_leave_fromDate.setText(fromDateArray[2] + "/" + fromDateArray[1] + "/" + fromDateArray[0]);
+                    String toDate = leaveRequest.getToDate();
+                    String[] toDateArray = toDate.split("-");
+                    textView_confirm_leave_toDate.setText(toDateArray[2] + "/" + toDateArray[1] + "/" + toDateArray[0]);
+                    textView_confirm_leave_content.setText(leaveRequest.getContent());
+                    confirm_leave_dialog.show();
+
+                    btn_confirm_leave_decline.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteLeaveRequest(userToken, leaveRequest.getId());
+                            Toast.makeText(getActivity(), "Hủy đơn xin nghỉ thành công", Toast.LENGTH_SHORT).show();
+                            confirm_leave_dialog.dismiss();
+                            listRequest = viewLeaveRequestForUser(userToken, "fromDate,desc", 0);
+                            if (listRequest != null) {
+                                listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest,getActivity()));
+                            }
+                            ViewLeaveRequestFragment fragment = new ViewLeaveRequestFragment();
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, fragment, "abc")
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    });
+
+                    btn_confirm_leave_accept.setVisibility(View.INVISIBLE);
+
+                    btn_confirm_leave_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirm_leave_dialog.dismiss();
+                        }
+                    });
+                }
+            });
+        }
+
+        if(userRole.equals("ROLE_ADMIN")){
+            listRequest = viewLeaveRequestForApprover(userToken, "fromDate, desc", 0);
+            if(listRequest!=null){
+                listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, getActivity()));
+            }
+            listView_confirm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Object object = listView_confirm.getItemAtPosition(position);
+                    LeaveRequest leaveRequest = (LeaveRequest) object;
+                    textView_confirm_leave_displayName.setText(leaveRequest.getUser().getDisplayName());
+                    String fromDate = leaveRequest.getFromDate();
+                    String[] fromDateArray = fromDate.split("-");
+                    textView_confirm_leave_fromDate.setText(fromDateArray[2] + "/" + fromDateArray[1] + "/" + fromDateArray[0]);
+                    String toDate = leaveRequest.getToDate();
+                    String[] toDateArray = toDate.split("-");
+                    textView_confirm_leave_toDate.setText(toDateArray[2] + "/" + toDateArray[1] + "/" + toDateArray[0]);
+                    textView_confirm_leave_content.setText(leaveRequest.getContent());
+                    confirm_leave_dialog.show();
+
+                    btn_confirm_leave_decline.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteLeaveRequest(userToken, leaveRequest.getId());
+                            Toast.makeText(getActivity(), "Hủy đơn xin nghỉ thành công", Toast.LENGTH_SHORT).show();
+                            confirm_leave_dialog.dismiss();
+                            listRequest = viewLeaveRequestForApprover(userToken, "fromDate,desc", 0);
+                            if (listRequest != null) {
+                                listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest,getActivity()));
+                            }
+                            ViewLeaveRequestFragment fragment = new ViewLeaveRequestFragment();
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, fragment, "abc")
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    });
+
+                    btn_confirm_leave_accept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            leaveRequest.setStatus(1);
+                            updateLeaveRequest(userToken, leaveRequest.getId(), leaveRequest);
+                            Toast.makeText(getActivity(), "Đã duyệt đơn nghỉ phép", Toast.LENGTH_SHORT).show();
+                            confirm_leave_dialog.dismiss();
+                            listRequest = viewLeaveRequestForApprover(userToken, "fromDate,desc", 0);
+                            if (listRequest != null) {
+                                listView_confirm.setAdapter(new ConfirmLeaveAdapter(listRequest, getActivity()));
+                            }
+                            ViewLeaveRequestFragment fragment = new ViewLeaveRequestFragment();
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, fragment, "abc")
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    });
+
+                    btn_confirm_leave_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirm_leave_dialog.dismiss();
+                        }
+                    });
+                }
+            });
+        }
+
         return rootView;
     }
 
@@ -150,5 +226,17 @@ public class ViewLeaveRequestFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private List<LeaveRequest> viewLeaveRequestForApprover(String userToken, String sort, Integer status){
+        List<LeaveRequest> leaveRequests = new ArrayList<>();
+        Call<List<LeaveRequest>> call = leaveService.findLeaveRequestByApprover(
+                "Bearer " + userToken, sort, status);
+
+        try {
+            leaveRequests = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return leaveRequests;
     }
 }

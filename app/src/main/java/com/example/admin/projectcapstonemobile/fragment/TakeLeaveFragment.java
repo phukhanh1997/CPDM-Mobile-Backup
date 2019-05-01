@@ -254,6 +254,9 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
 
     private User getApprover(String userToken){
         String roleName = "ROLE_MANAGER";
+        if(userRole.equals("ROLE_MANAGER")){
+            roleName = "ROLE_ADMIN";
+        }
         List<User> approver = new ArrayList<>();
         Call<List<User>> call = userService.getApprover("Bearer " + userToken, roleName);
         try {

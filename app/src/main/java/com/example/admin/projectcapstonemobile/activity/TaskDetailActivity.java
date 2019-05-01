@@ -79,6 +79,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
     private LinearLayout mImgBack;
     private LinearLayout mLnlChangeStatus;
     private LinearLayout mLnlViewAllComments;
+    private TextView viewAllComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
 //        btnChangeStatus = findViewById(R.id.btn_task_detail_change_status);
         listView_taskIssue = (ExpandableListView) findViewById(R.id.listView_taskIssue);
         listView_taskIssue.setNestedScrollingEnabled(false);
+        viewAllComment = (TextView) findViewById(R.id.textView_view_all_comment);
         //dialog
         commentDialog = new Dialog(TaskDetailActivity.this);
         commentDialog.setTitle("Chỉnh sửa bình luận");
@@ -272,22 +274,15 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
                 });
             }
         });
-        btnComment.setOnClickListener(new View.OnClickListener() {
+
+        viewAllComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = edtComment.getText().toString();
-                if (validationComment(content)) {
-                    Task newTask = new Task(task.getId());
-                    Comment newComment = new Comment(content, newTask, 1);
-                    createComment(newComment);
-                    finish();
-                    startActivity(getIntent());
-                } else {
-                    Toast.makeText(TaskDetailActivity.this, "Comment can't be empty.", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(TaskDetailActivity.this, CommentActivity.class);
+                intent.putExtra("taskId", taskId);
+                startActivity(intent);
             }
         });
-
         mImgBack = findViewById(R.id.linear_layout_back);
         mImgBack.setOnClickListener(this);
         mLnlViewAllComments = findViewById(R.id.linear_layout_view_all_comments);

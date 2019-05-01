@@ -16,9 +16,16 @@ import com.example.admin.projectcapstonemobile.model.Credential;
 import com.example.admin.projectcapstonemobile.model.ResObject;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.UserService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import retrofit2.Call;
@@ -64,9 +71,26 @@ public class LoginActivity extends AppCompatActivity {
                             JWT parsedJWT = new JWT(userToken);
                             Claim subscriptionMetadata = parsedJWT.getClaim("sub");
                             String username = subscriptionMetadata.asString();
+                            String topic[] = username.split("@");
                             //get authorities
                             Claim subscriptionMetaData = parsedJWT.getClaim("authorities");
                             List<String> role = subscriptionMetaData.asList(String.class);
+                            FirebaseInstanceId.getInstance().getInstanceId()
+                                    .addOnSuccessListener(LoginActivity.this, new OnSuccessListener<InstanceIdResult>() {
+                                        @Override
+                                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                                            String token = instanceIdResult.getToken();
+                                            //Toast.makeText(LoginActivity.this, "Day la token " + token, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                            FirebaseMessaging.getInstance().subscribeToTopic(topic[0])
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            //Toast.makeText(LoginActivity.this, "Da sub thanh cong", Toast.LENGTH_SHORT).show();
+                                            System.out.println("Da sub thanh cong");
+                                        }
+                                    });
                             //save in shared preferences
                             SharedPreferences sharedPreferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -78,14 +102,14 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                             LoginActivity.this.finish();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Wrong username or password!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
                         }
 
                     }
 
                     @Override
                     public void onFailure(Call<ResObject> call, Throwable t) {
-                        Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
                     }
                 });
 

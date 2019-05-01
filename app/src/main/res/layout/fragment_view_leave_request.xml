@@ -6,8 +6,20 @@
     android:background="@color/white"
     tools:context=".fragment.ViewLeaveRequestFragment">
 
-    <ListView
-        android:id="@+id/listView_view_leave_request_request"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></ListView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/txtView_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quản lý đơn xin nghỉ"
+            android:textColor="@color/charcoal"
+            android:textStyle="bold"/>
+        <ListView
+            android:id="@+id/listView_view_leave_request_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtView_header"></ListView>
+    </RelativeLayout>
 </FrameLayout>

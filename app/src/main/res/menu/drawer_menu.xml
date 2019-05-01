@@ -17,21 +17,10 @@
             android:id="@+id/nav_take_leave_list"
             android:title="@string/menu_leave_list" />
         <item
-            android:id="@+id/nav_view_staff_leave"
-            android:title="@string/view_staff_leave" />
+            android:id="@+id/nav_notification"
+            android:title="@string/menu_notification" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:title="@string/menu_log_out" />
     </group>
-
-
-    <!--<item android:title="Communicate">-->
-    <!--<menu>-->
-    <!--<item-->
-    <!--android:id="@+id/nav_share"-->
-    <!--android:icon="@drawable/ic_mail"-->
-    <!--android:title="Share" />-->
-    <!--<item-->
-    <!--android:id="@+id/nav_send"-->
-    <!--android:icon="@drawable/ic_mail"-->
-    <!--android:title="Send" />-->
-    <!--</menu>-->
-    <!--</item>-->
 </menu>

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:fillViewport="true"
     android:orientation="vertical">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -214,22 +211,27 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp6"
-                        android:text="Issues"
-                        android:textColor="@color/charcoal"
-                        android:textSize="@dimen/sp16"
-                        android:textStyle="bold" />
-
-                    <ExpandableListView
-                        android:id="@+id/listView_taskIssue"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="134dp"></ExpandableListView>
+                        android:layout_height="450dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/dp6"
+                            android:text="Issues"
+                            android:textColor="@color/charcoal"
+                            android:textSize="@dimen/sp16"
+                            android:textStyle="bold" />
+
+                        <ExpandableListView
+                            android:id="@+id/listView_taskIssue"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"></ExpandableListView>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <FrameLayout
@@ -261,6 +263,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/textView_view_all_comment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
@@ -280,6 +283,4 @@
 
         </LinearLayout>
 
-    </ScrollView>
-
-</FrameLayout>
+</ScrollView>
