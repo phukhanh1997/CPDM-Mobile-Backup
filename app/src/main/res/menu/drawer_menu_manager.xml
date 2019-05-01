@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_assginedTask"
+            android:title="@string/menu_assigned_task" />
+        <item
+            android:id="@+id/nav_created_task"
+            android:title="@string/menu_created_task" />
+        <item
+            android:id="@+id/nav_take_leave"
+            android:title="@string/menu_take_leave" />
+        <item
+            android:id="@+id/nav_take_leave_list"
+            android:title="@string/menu_leave_list" />
+        <item
+            android:id="@+id/nav_view_staff_leave"
+            android:title="@string/view_staff_leave_manager" />
+        <item
+            android:id="@+id/nav_notification"
+            android:title="@string/menu_notification" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:title="@string/menu_log_out" />
+    </group>
+
+
+    <!--<item android:title="Communicate">-->
+    <!--<menu>-->
+    <!--<item-->
+    <!--android:id="@+id/nav_share"-->
+    <!--android:icon="@drawable/ic_mail"-->
+    <!--android:title="Share" />-->
+    <!--<item-->
+    <!--android:id="@+id/nav_send"-->
+    <!--android:icon="@drawable/ic_mail"-->
+    <!--android:title="Send" />-->
+    <!--</menu>-->
+    <!--</item>-->
+</menu>
