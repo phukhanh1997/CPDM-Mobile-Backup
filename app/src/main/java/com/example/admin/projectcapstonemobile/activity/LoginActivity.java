@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("userToken", userToken);
                             editor.putString("userName", username);
                             editor.putString("userRole", role.get(0));
+                            editor.putString("displayName", topic[0]);
                             editor.commit();
 
                             startActivity(intent);

@@ -1,5 +1,6 @@
 package com.example.admin.projectcapstonemobile.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -110,6 +111,7 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
         if (issue.getCompleted()) {
             holder.taskIssueStatus.setText("Hoàn thành");
             holder.imgStatus.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_checked));
+            holder.buttonFinish.setVisibility(View.INVISIBLE);
         } else {
             holder.taskIssueStatus.setText("Chưa hoàn thành");
             holder.imgStatus.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_circle_shape));
@@ -117,15 +119,35 @@ public class TaskIssueAdapter extends BaseExpandableListAdapter implements Seria
         holder.buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call<TaskIssue> call = taskService.completeTaskIssue("Bearer " + userToken, issue.getId());
-                try {
-                    call.execute().body();
-                    holder.taskIssueStatus.setText("Hoàn thành");
-                    holder.imgStatus.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_checked));
-                    holder.buttonFinish.setVisibility(View.INVISIBLE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.dialog_confirm_taskissue);
+                dialog.setTitle("Xác nhận báo cáo");
+                Button btn_confirm = (Button) dialog.findViewById(R.id.btn_confirm_changestatusissue);
+                Button btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel_changestatusissue);
+                dialog.show();
+                btn_confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Call<TaskIssue> call = taskService.completeTaskIssue("Bearer " + userToken, issue.getId());
+                        try {
+                            call.execute().body();
+                            holder.taskIssueStatus.setText("Hoàn thành");
+                            holder.imgStatus.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_checked));
+                            holder.buttonFinish.setVisibility(View.INVISIBLE);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
         return convertView;

@@ -4,6 +4,7 @@ package com.example.admin.projectcapstonemobile.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -123,6 +124,7 @@ public class AssignedTaskFragment extends Fragment {
 
     private void CheckBtnBackGroud(int index) {
         title.setText("Danh sách công việc");
+        title.setTextColor(Color.GRAY);
         for (int i = 0; i < noOfBtns; i++) {
             if (i == index) {
                 btns[index].setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));

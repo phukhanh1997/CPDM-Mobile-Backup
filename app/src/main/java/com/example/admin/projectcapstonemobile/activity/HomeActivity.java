@@ -7,10 +7,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.projectcapstonemobile.R;
@@ -20,6 +25,7 @@ import com.example.admin.projectcapstonemobile.fragment.TakeLeaveFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewLeaveRequestForManagerFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewLeaveRequestFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewLeaveStaffFragment;
+import com.example.admin.projectcapstonemobile.fragment.ViewNotificationFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,7 +33,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
-    String userToken, userRole;
+    String userToken, userRole, displayName;
+    Dialog dialog_logout;
+    Button btn_confirm, btn_cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         final SharedPreferences sharedPreferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
         userRole = sharedPreferences.getString("userRole", "");
+        displayName = sharedPreferences.getString("displayName", "");
         if(userRole.equals("ROLE_STAFF")){
             setContentView(R.layout.activity_home);
         }
@@ -44,6 +53,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if(userRole.equals("ROLE_ADMIN")){
             setContentView(R.layout.activity_home_admin);
         }
+
+        dialog_logout = new Dialog(this);
+        dialog_logout.setTitle("Xác nhận đăng xuất");
+        dialog_logout.setContentView(R.layout.dialog_logout);
+        btn_confirm = (Button) dialog_logout.findViewById(R.id.btn_confirm_logout);
+        btn_cancel = (Button) dialog_logout.findViewById(R.id.btn_cancel_logout);
 
     }
 
@@ -66,6 +81,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        TextView textView = (TextView) header.findViewById(R.id.textView_username);
+        textView.setText(displayName);
     }
 
     private void initialData() {
@@ -109,6 +127,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             new ViewLeaveRequestForManagerFragment()).commit();
                     break;
+                case R.id.nav_notification:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new ViewNotificationFragment()).commit();
+                    break;
+                case R.id.nav_log_out:
+                    dialog_logout.show();
+                    btn_confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SharedPreferences preferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.clear();
+                            editor.commit();
+                            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            HomeActivity.this.finish();
+                        }
+                    });
+                    btn_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog_logout.dismiss();
+                        }
+                    });
+                    break;
             }
         }
         else{
@@ -133,6 +176,32 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             new ViewLeaveStaffFragment()).commit();
                     break;
+                case R.id.nav_notification:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new ViewNotificationFragment()).commit();
+                    break;
+                case R.id.nav_log_out:
+                    dialog_logout.show();
+                    btn_confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SharedPreferences preferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.clear();
+                            editor.commit();
+                            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            HomeActivity.this.finish();
+                        }
+                    });
+                    btn_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog_logout.dismiss();
+                        }
+                    });
+                    break;
+
             }
         }
         drawer.closeDrawer(GravityCompat.START);
