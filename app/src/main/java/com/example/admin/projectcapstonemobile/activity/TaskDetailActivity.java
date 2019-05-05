@@ -22,14 +22,22 @@ import com.example.admin.projectcapstonemobile.adapter.CommentListAdapter;
 import com.example.admin.projectcapstonemobile.adapter.StoredCommentListAdapter;
 import com.example.admin.projectcapstonemobile.adapter.TaskIssueAdapter;
 import com.example.admin.projectcapstonemobile.model.Comment;
+import com.example.admin.projectcapstonemobile.model.Notification;
 import com.example.admin.projectcapstonemobile.model.StoredComment;
 import com.example.admin.projectcapstonemobile.model.Task;
 import com.example.admin.projectcapstonemobile.model.TaskIssue;
 import com.example.admin.projectcapstonemobile.model.User;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.CommentService;
+import com.example.admin.projectcapstonemobile.remote.NotificationService;
 import com.example.admin.projectcapstonemobile.remote.TaskService;
 import com.example.admin.projectcapstonemobile.remote.UserService;
+import com.google.android.gms.common.api.Api;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -39,6 +47,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import retrofit2.Call;
@@ -61,6 +70,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
     private CommentService commentService;
     private TaskService taskService;
     private UserService userService;
+    private NotificationService notificationService;
     private List<Comment> listComment;
     private List<TaskIssue> listIssue;
     private List<StoredComment> listStoredComment;
@@ -80,6 +90,11 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
     private LinearLayout mLnlChangeStatus;
     private LinearLayout mLnlViewAllComments;
     private TextView viewAllComment;
+    private User self;
+    private Task task;
+    private List<User> receiver = new ArrayList<>();
+    private List<User> relatives = new ArrayList<>();
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +116,8 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         listView_taskIssue = (ExpandableListView) findViewById(R.id.listView_taskIssue);
         listView_taskIssue.setNestedScrollingEnabled(false);
         viewAllComment = (TextView) findViewById(R.id.textView_view_all_comment);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         //dialog
         commentDialog = new Dialog(TaskDetailActivity.this);
         commentDialog.setTitle("Chỉnh sửa bình luận");
@@ -115,15 +132,18 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         commentService = ApiUtils.getCommentService();
         taskService = ApiUtils.getTaskService();
         userService = ApiUtils.getUserService();
+        notificationService = ApiUtils.getNotificationService();
         listView_comment = (ListView) findViewById(R.id.listComment);
         listView_comment.setNestedScrollingEnabled(false);
         //userToken = (String) getIntent().getSerializableExtra("UserToken");
         final SharedPreferences sharedPreferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
 
+        self = getUserInformation(userToken);
+
         //load task information
         taskId = (Integer) getIntent().getSerializableExtra("taskId");
-        Task task = getTaskDetail(userToken, taskId);
+        task = getTaskDetail(userToken, taskId);
 //        txt_createdBy.setText(task.getCreator().getDisplayName());
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date dateStart = new Date();
@@ -154,6 +174,9 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
             mTxtStatus.setText("Hoàn thành quá hạn");
             mLnlChangeStatus.setVisibility(View.GONE);
 //            btnChangeStatus.setEnabled(false);
+        }
+        if(self.getId()!=task.getExecutor().getId() || self.getId()!=task.getCreator().getId()){
+            mLnlChangeStatus.setVisibility(View.GONE);
         }
 //        System.out.println("Luc load len la`" + btnChangeStatus.getText());
         //load issue
@@ -251,6 +274,75 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
                             @Override
                             public void onResponse(Call<Task> call, Response<Task> response) {
                                 if (response.isSuccessful()) {
+                                    relatives = getAllRelatives(userToken, taskId);
+                                    if(relatives!=null){
+                                        for (User x: relatives) {
+                                            receiver.add(x);
+                                        }
+                                    }
+                                    Integer idCreator = task.getCreator().getId();
+                                    User creator = new User(idCreator);
+                                    receiver.add(creator);
+                                    confirmDialog.dismiss();
+                                    for (User user: receiver) {
+                                        Notification newNoti = new Notification("Một tác vụ đã được báo cáo từ " + self.getDisplayName(), task.getTitle(), "/tasks/" + taskId, user);
+                                        Call<Notification> callNoti = notificationService.sendNotification("Bearer " + userToken, newNoti);
+
+                                        callNoti.enqueue(new Callback<Notification>() {
+                                            @Override
+                                            public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                                if (response.isSuccessful()) {
+                                                    Integer idRes = response.body().getId();
+                                                    for (User x : receiver) {
+                                                        databaseReference.child("users/").child(x.getId().toString()).addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                List<String> abc = (List<String>) dataSnapshot.getValue();
+                                                                String title = newNoti.getTitle();
+                                                                String detail = newNoti.getDetail();
+                                                                System.out.println("Day la title " + title);
+                                                                System.out.println("Day la detail " + detail);
+                                                                Notification noti = new Notification(title, detail, abc);
+                                                                noti.setUrl("/tasks/" + taskId);
+                                                                noti.setId(idRes);
+
+                                                                Call<Void> callPush = notificationService.pushNotification("Bearer " + userToken, noti);
+                                                                callPush.enqueue(new Callback<Void>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                                                        if (response.isSuccessful()) {
+                                                                            //Toast.makeText(TaskDetailActivity.this, "Call success", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                        if (!response.isSuccessful()) {
+                                                                            //Toast.makeText(TaskDetailActivity.this, "Call fail", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onFailure(Call<Void> call, Throwable t) {
+                                                                        //Toast.makeText(TaskDetailActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                //Toast.makeText(TaskDetailActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<Notification> call, Throwable t) {
+                                                Toast.makeText(TaskDetailActivity.this, "Vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+
+
                                     Toast.makeText(TaskDetailActivity.this, "Báo cáo hoàn tất thành công.", Toast.LENGTH_SHORT).show();
                                     finish();
                                     startActivity(getIntent());
@@ -289,6 +381,8 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         mLnlViewAllComments.setOnClickListener(this);
     }
 
+
+
     private List<Comment> getAllCommentByTaskId(Integer taskId) {
         List<Comment> content = new ArrayList<>();
         Call<List<Comment>> call = commentService.getAllCommentByTaskId("Bearer " + userToken, taskId);
@@ -317,7 +411,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
 
     private boolean validationComment(String comment) {
         if (comment == null || comment.trim().length() == 0) {
-            Toast.makeText(this, "Comment can not be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Bình luận không thể bỏ trống!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -383,6 +477,30 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         if (listIssue != null) {
             return listIssue;
         } else return null;
+    }
+
+
+    private User getUserInformation(String userToken) {
+        User newUser = new User();
+        Call<User> call = userService.getUserInformation(userToken);
+        try {
+            newUser = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newUser;
+    }
+
+    private List<User> getAllRelatives(String userToken, Integer taskId){
+        List<User> listRelative = new ArrayList<>();
+        Call<List<User>> call = taskService.getAllRelatives("Bearer " + userToken, taskId);
+
+        try {
+            listRelative = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return listRelative;
     }
 
     @Override

@@ -122,11 +122,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validationLogin(String username, String password) {
         if (username == null || username.trim().length() == 0) {
-            Toast.makeText(this, "Username is required!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Tài khoản không thể trống.", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (password == null || password.trim().length() == 0) {
-            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Mật khẩu không thể trống.", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

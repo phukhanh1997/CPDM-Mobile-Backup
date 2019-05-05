@@ -1,7 +1,10 @@
 package com.example.admin.projectcapstonemobile.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -20,13 +23,21 @@ import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.adapter.CommentListAdapter;
 import com.example.admin.projectcapstonemobile.adapter.StoredCommentListAdapter;
 import com.example.admin.projectcapstonemobile.model.Comment;
+import com.example.admin.projectcapstonemobile.model.Notification;
 import com.example.admin.projectcapstonemobile.model.StoredComment;
 import com.example.admin.projectcapstonemobile.model.Task;
 import com.example.admin.projectcapstonemobile.model.User;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.CommentService;
+import com.example.admin.projectcapstonemobile.remote.NotificationService;
+import com.example.admin.projectcapstonemobile.remote.TaskService;
 import com.example.admin.projectcapstonemobile.remote.UserService;
 import com.google.android.gms.common.api.Api;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,19 +63,49 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     private Button btn_dialog_comment_confirm;
     private Button btn_dialog_comment_cancel;
     private Button btn_confirm_change_status;
+    private NotificationService notificationService;
+    private TaskService taskService;
+    private Task task;
+    private List<User> receivers = new ArrayList<>();
+    private DatabaseReference databaseReference;
+    private List<User> relatives;
+    private User selfUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         initialView();
+        final SharedPreferences sharedPreferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
+        userToken = sharedPreferences.getString("userToken", "");
         commentService = ApiUtils.getCommentService();
         userService = ApiUtils.getUserService();
+        taskService = ApiUtils.getTaskService();
+        notificationService = ApiUtils.getNotificationService();
         taskId = (Integer) getIntent().getSerializableExtra("taskId");
+        task = getTaskDetail(userToken, taskId);
+
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         listView_comment = (ListView) findViewById(R.id.listCommentDetail);
         edtComment = (EditText) findViewById(R.id.edtText_task_detail_comment);
         btnComment = (Button) findViewById(R.id.btn_task_detail_send_comment);
 
-
+        relatives = getAllRelatives(userToken, taskId);
+        Integer idCreator = task.getCreator().getId();
+        Integer idExecutor = task.getExecutor().getId();
+        User creator = new User(idCreator);
+        User executor = new User(idExecutor);
+        if(relatives!=null){
+            for (User x: relatives) {
+                receivers.add(x);
+            }
+        }
+        receivers.add(creator);
+        receivers.add(executor);
+        Integer selfId = getUserId(userToken);
+        User self = new User(selfId);
+        receivers.remove(self);
+        selfUser = getUserInformation(userToken);
         commentDialog = new Dialog(CommentActivity.this);
         commentDialog.setTitle("Chỉnh sửa bình luận");
         commentDialog.setContentView(R.layout.dialog_comment);
@@ -74,8 +115,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         btn_dialog_comment_cancel = (Button) commentDialog.findViewById(R.id.btn_dialog_comment_cancel);
         listView_storedComment = (ListView) commentDialog.findViewById(R.id.listView_storedComment);
 
-        final SharedPreferences sharedPreferences = getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
-        userToken = sharedPreferences.getString("userToken", "");
 
 
         listComment = getAllCommentByTaskId(taskId);
@@ -147,6 +186,62 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                     Task newTask = new Task(taskId);
                     Comment newComment = new Comment(content, newTask, 1);
                     createComment(newComment);
+                    for (User x:receivers) {
+                        Notification newNoti = new Notification("Một bình luận của " + selfUser.getDisplayName(), "Từ " + task.getTitle(), "/tasks/" + taskId, x);
+                        Call<Notification> callNoti = notificationService.sendNotification("Bearer " + userToken, newNoti);
+                        callNoti.enqueue(new Callback<Notification>() {
+                            @Override
+                            public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                if(response.isSuccessful()){
+                                    Integer idRes = response.body().getId();
+                                    for (User x: receivers) {
+                                        databaseReference.child("users/").child(x.getId().toString()).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                List<String> abc = (List<String>) dataSnapshot.getValue();
+                                                String title = newNoti.getTitle();
+                                                String detail = newNoti.getDetail();
+                                                System.out.println("Day la title " + title);
+                                                System.out.println("Day la detail " + detail);
+                                                Notification noti = new Notification(title, detail, abc);
+                                                noti.setId(idRes);
+                                                noti.setUrl("/tasks/" + taskId);
+
+                                                Call<Void> callPush = notificationService.pushNotification("Bearer " + userToken, noti);
+                                                callPush.enqueue(new Callback<Void>() {
+                                                    @Override
+                                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                                        if (response.isSuccessful()) {
+                                                            //Toast.makeText(CommentActivity.this, "Call success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        if (!response.isSuccessful()) {
+                                                            //Toast.makeText(CommentActivity.this, "Call fail", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Void> call, Throwable t) {
+                                                        //Toast.makeText(CommentActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Notification> call, Throwable t) {
+
+                            }
+                        });
+                    }
+
                     finish();
                     startActivity(getIntent());
                 } else {
@@ -169,6 +264,18 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
+    private User getUserInformation(String userToken) {
+        User newUser = new User();
+        Call<User> call = userService.getUserInformation(userToken);
+        try {
+            newUser = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newUser;
+    }
+
     private boolean validationComment(String comment) {
         if (comment == null || comment.trim().length() == 0) {
             Toast.makeText(this, "Comment can not be empty!", Toast.LENGTH_SHORT).show();
@@ -227,5 +334,26 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
             e.printStackTrace();
         }
         return user.getId();
+    }
+    private List<User> getAllRelatives(String userToken, Integer taskId){
+        List<User> listRelative = new ArrayList<>();
+        Call<List<User>> call = taskService.getAllRelatives("Bearer " + userToken, taskId);
+
+        try {
+            listRelative = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return listRelative;
+    }
+    private Task getTaskDetail(String userToken, Integer taskId) {
+        Task taskDetail = new Task();
+        Call<Task> call = taskService.getTaskDetail("Bearer " + userToken, taskId);
+        try {
+            taskDetail = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return taskDetail;
     }
 }

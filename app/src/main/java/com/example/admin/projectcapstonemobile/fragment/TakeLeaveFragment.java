@@ -19,11 +19,18 @@ import android.widget.Toast;
 import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.activity.FragmentActivity;
 import com.example.admin.projectcapstonemobile.model.LeaveRequest;
+import com.example.admin.projectcapstonemobile.model.Notification;
 import com.example.admin.projectcapstonemobile.model.User;
 import com.example.admin.projectcapstonemobile.model.YearSummary;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.LeaveService;
+import com.example.admin.projectcapstonemobile.remote.NotificationService;
 import com.example.admin.projectcapstonemobile.remote.UserService;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.io.IOException;
@@ -34,6 +41,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +50,7 @@ import retrofit2.Response;
 public class TakeLeaveFragment extends Fragment implements com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
     private LeaveService leaveService;
     private UserService userService;
+    private NotificationService notificationService;
     private List<String> listNotAllowed;
     private List<String> listStringWorking;
     private List<Calendar> listCalendar = new ArrayList<>();
@@ -66,6 +75,8 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
     private TextView totalDay;
     private TextView usedDay;
     private TextView availableDay;
+    private User self;
+    private DatabaseReference databaseReference;
     public TakeLeaveFragment() {
         // Required empty public constructor
     }
@@ -86,10 +97,15 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
 
         leaveService = ApiUtils.getLeaveService();
         userService = ApiUtils.getUserService();
+        notificationService = ApiUtils.getNotificationService();
         final SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
         userRole = sharedPreferences.getString("userRole", "");
         userId = getUserId(userToken);
+
+        self = getUserInformation(userToken);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         myCalendar1  = Calendar.getInstance();
         myCalendar2  = Calendar.getInstance();
@@ -215,6 +231,54 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
                                     .replace(R.id.fragment_container, fragment, "abc")
                                     .addToBackStack(null)
                                     .commit();
+                            User user = new User(userId);
+                            Notification notification = new Notification("Đơn xin nghỉ phép từ " + self.getDisplayName(), content, "/approverLeaveRequests", userApprove);
+                            Call<Notification> callNotification = notificationService.sendNotification("Bearer " + userToken, notification);
+                            callNotification.enqueue(new Callback<Notification>() {
+                                @Override
+                                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                    if(response.isSuccessful()){
+                                        databaseReference.child("users/").child(userApprove.getId().toString()).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                List<String> abc = (List<String>) dataSnapshot.getValue();
+                                                String title = notification.getTitle();
+                                                String detail = notification.getDetail();
+                                                System.out.println("Day la title " + title);
+                                                System.out.println("Day la detail " + detail);
+                                                Notification noti = new Notification(title, detail, abc);
+                                                Call<Void> callPush = notificationService.pushNotification("Bearer " + userToken, notification);
+                                                callPush.enqueue(new Callback<Void>() {
+                                                    @Override
+                                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                                        if(response.isSuccessful()){
+                                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        if(!response.isSuccessful()){
+                                                            Toast.makeText(getActivity(), "Not success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Void> call, Throwable t) {
+                                                        Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Notification> call, Throwable t) {
+
+                                }
+                            });
                         }
                         else{
                             Toast.makeText(getActivity(), "Ngày nghỉ không hợp lệ.", Toast.LENGTH_SHORT).show();
@@ -318,6 +382,18 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
             e.printStackTrace();
         }
         return summary;
+    }
+
+
+    private User getUserInformation(String userToken){
+        User newUser = new User();
+        Call<User> call = userService.getUserInformation(userToken);
+        try {
+            newUser = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newUser;
     }
 
     @Override

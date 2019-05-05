@@ -11,6 +11,9 @@
             android:id="@+id/nav_created_task"
             android:title="@string/menu_created_task" />
         <item
+            android:id="@+id/nav_relative_task"
+            android:title="@string/menu_relative_task" />
+        <item
             android:id="@+id/nav_take_leave_list"
             android:title="@string/menu_leave_list_admin" />
         <item

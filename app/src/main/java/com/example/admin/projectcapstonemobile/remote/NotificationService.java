@@ -15,6 +15,8 @@ public interface NotificationService {
     Call<List<Notification>> getAllNotification(@Header("Authorization") String userToken);
 
     @POST("notifications/push")
-    Call<Notification> pushNotification(@Header("Authorization") String userToken,
+    Call<Void> pushNotification(@Header("Authorization") String userToken,
                                         @Body Notification notification);
+    @POST("notifications")
+    Call<Notification> sendNotification(@Header("Authorization") String userToken, @Body Notification notification);
 }

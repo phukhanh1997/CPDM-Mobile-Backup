@@ -21,12 +21,16 @@ import android.widget.Toast;
 import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.fragment.AssignedTaskFragment;
 import com.example.admin.projectcapstonemobile.fragment.CreatedTaskFragment;
+import com.example.admin.projectcapstonemobile.fragment.RelativeTaskFragment;
 import com.example.admin.projectcapstonemobile.fragment.TakeLeaveFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewLeaveRequestForManagerFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewLeaveRequestFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewLeaveStaffFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewNotificationFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final String userInformationSharedPreferences = "informationSharedPreferences";
@@ -72,6 +76,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new AssignedTaskFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_assginedTask);
+
     }
 
     private void initialView() {
@@ -114,6 +119,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.nav_created_task:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             new CreatedTaskFragment()).commit();
+                    break;
+                    case R.id.nav_relative_task:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new RelativeTaskFragment()).commit();
                     break;
                 case R.id.nav_take_leave:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -164,6 +173,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             new CreatedTaskFragment()).commit();
                     break;
+                case R.id.nav_relative_task:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new RelativeTaskFragment()).commit();
+                    break;
                 case R.id.nav_take_leave:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             new TakeLeaveFragment()).commit();
@@ -189,6 +202,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.clear();
                             editor.commit();
+//                            new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    try {
+//                                        FirebaseInstanceId.getInstance().deleteInstanceId();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                            }).start();
                             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                             startActivity(intent);
                             HomeActivity.this.finish();

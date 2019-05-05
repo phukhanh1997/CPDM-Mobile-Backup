@@ -214,6 +214,7 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:id="@+id/linear_issue"
                         android:layout_width="match_parent"
                         android:layout_height="450dp"
                         android:orientation="vertical">

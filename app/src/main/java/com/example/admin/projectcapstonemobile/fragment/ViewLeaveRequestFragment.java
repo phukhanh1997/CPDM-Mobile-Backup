@@ -6,8 +6,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +24,16 @@ import android.widget.Toast;
 import com.example.admin.projectcapstonemobile.R;
 import com.example.admin.projectcapstonemobile.adapter.ConfirmLeaveAdapter;
 import com.example.admin.projectcapstonemobile.model.LeaveRequest;
+import com.example.admin.projectcapstonemobile.model.Notification;
+import com.example.admin.projectcapstonemobile.model.User;
 import com.example.admin.projectcapstonemobile.remote.ApiUtils;
 import com.example.admin.projectcapstonemobile.remote.LeaveService;
+import com.example.admin.projectcapstonemobile.remote.NotificationService;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,7 +54,8 @@ public class ViewLeaveRequestFragment extends Fragment {
     private String userToken;
     private String userRole;
     private List<LeaveRequest> listRequest = new ArrayList<>();
-
+    private NotificationService notificationService;
+    private DatabaseReference databaseReference;
     public ViewLeaveRequestFragment() {
         // Required empty public constructor
     }
@@ -61,6 +73,8 @@ public class ViewLeaveRequestFragment extends Fragment {
         rootView =  inflater.inflate(R.layout.fragment_view_leave_request, container, false);
         listView_confirm = (ListView) rootView.findViewById(R.id.listView_view_leave_request_request);
         leaveService = ApiUtils.getLeaveService();
+        notificationService = ApiUtils.getNotificationService();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         final SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(userInformationSharedPreferences, Context.MODE_PRIVATE);
         userToken = sharedPreferences.getString("userToken", "");
         userRole = sharedPreferences.getString("userRole", "");
@@ -113,6 +127,58 @@ public class ViewLeaveRequestFragment extends Fragment {
                                     .replace(R.id.fragment_container, fragment, "abc")
                                     .addToBackStack(null)
                                     .commit();
+                            User x = leaveRequest.getUser();
+                            Notification newNoti = new Notification("Đơn xin phép đã bị hủy ", leaveRequest.getContent(), "/approverLeaveRequests", x);
+                            Call<Notification> callNoti = notificationService.sendNotification("Bearer " + userToken, newNoti);
+                            callNoti.enqueue(new Callback<Notification>() {
+                                @Override
+                                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                    if(response.isSuccessful()){
+                                        Integer idRes = response.body().getId();
+                                        databaseReference.child("users/").child(x.getId().toString()).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                List<String> abc = (List<String>) dataSnapshot.getValue();
+                                                String title = newNoti.getTitle();
+                                                String detail = newNoti.getDetail();
+                                                System.out.println("Day la title " + title);
+                                                System.out.println("Day la detail " + detail);
+                                                Notification noti = new Notification(title, detail, abc);
+                                                noti.setUrl("/userLeaveRequest");
+                                                noti.setId(idRes);
+
+                                                Call<Void> callPush = notificationService.pushNotification("Bearer " + userToken, noti);
+                                                callPush.enqueue(new Callback<Void>() {
+                                                    @Override
+                                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                                        if(response.isSuccessful()){
+                                                            //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        if(!response.isSuccessful()){
+                                                            //Toast.makeText(getActivity(), "Not success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Void> call, Throwable t) {
+                                                        //Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Notification> call, Throwable t) {
+
+                                }
+                            });
                         }
                     });
 
@@ -163,6 +229,58 @@ public class ViewLeaveRequestFragment extends Fragment {
                                     .replace(R.id.fragment_container, fragment, "abc")
                                     .addToBackStack(null)
                                     .commit();
+                            User x = leaveRequest.getUser();
+                            Notification newNoti = new Notification("Đơn xin phép đã bị hủy ", leaveRequest.getContent(), "/userLeaveRequests", x);
+                            Call<Notification> callNoti = notificationService.sendNotification("Bearer " + userToken, newNoti);
+                            callNoti.enqueue(new Callback<Notification>() {
+                                @Override
+                                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                    if(response.isSuccessful()){
+                                        Integer idRes = response.body().getId();
+                                        databaseReference.child("users/").child(x.getId().toString()).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                List<String> abc = (List<String>) dataSnapshot.getValue();
+                                                String title = newNoti.getTitle();
+                                                String detail = newNoti.getDetail();
+                                                System.out.println("Day la title " + title);
+                                                System.out.println("Day la detail " + detail);
+                                                Notification noti = new Notification(title, detail, abc);
+                                                noti.setUrl("/userLeaveRequest");
+                                                noti.setId(idRes);
+
+                                                Call<Void> callPush = notificationService.pushNotification("Bearer " + userToken, noti);
+                                                callPush.enqueue(new Callback<Void>() {
+                                                    @Override
+                                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                                        if(response.isSuccessful()){
+                                                            //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        if(!response.isSuccessful()){
+                                                            //Toast.makeText(getActivity(), "Not success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Void> call, Throwable t) {
+                                                        //Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Notification> call, Throwable t) {
+
+                                }
+                            });
                         }
                     });
 
@@ -182,6 +300,58 @@ public class ViewLeaveRequestFragment extends Fragment {
                                     .replace(R.id.fragment_container, fragment, "abc")
                                     .addToBackStack(null)
                                     .commit();
+                            User x = leaveRequest.getUser();
+                            Notification newNoti = new Notification("Đơn xin phép đã được duyệt ", leaveRequest.getContent(), "/userLeaveRequests", x);
+                            Call<Notification> callNoti = notificationService.sendNotification("Bearer " + userToken, newNoti);
+                            callNoti.enqueue(new Callback<Notification>() {
+                                @Override
+                                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                    if(response.isSuccessful()){
+                                        Integer idRes = response.body().getId();
+                                        databaseReference.child("users/").child(x.getId().toString()).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                List<String> abc = (List<String>) dataSnapshot.getValue();
+                                                String title = newNoti.getTitle();
+                                                String detail = newNoti.getDetail();
+                                                System.out.println("Day la title " + title);
+                                                System.out.println("Day la detail " + detail);
+                                                Notification noti = new Notification(title, detail, abc);
+                                                noti.setUrl("/userLeaveRequests");
+                                                noti.setId(idRes);
+
+                                                Call<Void> callPush = notificationService.pushNotification("Bearer " + userToken, noti);
+                                                callPush.enqueue(new Callback<Void>() {
+                                                    @Override
+                                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                                        if(response.isSuccessful()){
+                                                            //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        if(!response.isSuccessful()){
+                                                            //Toast.makeText(getActivity(), "Not success", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Void> call, Throwable t) {
+                                                        //Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Notification> call, Throwable t) {
+
+                                }
+                            });
                         }
                     });
 

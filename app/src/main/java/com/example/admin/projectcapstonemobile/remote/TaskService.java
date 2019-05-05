@@ -2,6 +2,7 @@ package com.example.admin.projectcapstonemobile.remote;
 
 import com.example.admin.projectcapstonemobile.model.Task;
 import com.example.admin.projectcapstonemobile.model.TaskIssue;
+import com.example.admin.projectcapstonemobile.model.User;
 
 import java.util.List;
 
@@ -33,4 +34,7 @@ public interface TaskService {
 
     @PATCH("task-issues/{id}/complete")
     Call<TaskIssue> completeTaskIssue(@Header("Authorization") String userToken, @Path("id") Integer id);
+
+    @GET("tasks/{taskId}/relatives")
+    Call<List<User>> getAllRelatives(@Header("Authorization") String userToken, @Path("taskId") Integer taskId);
 }

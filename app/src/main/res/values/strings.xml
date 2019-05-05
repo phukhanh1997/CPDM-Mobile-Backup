@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjectCapstoneMobile</string>
+    <string name="app_name">Construction Project Document Management</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -9,6 +9,7 @@
 
     <string name="menu_assigned_task">Tác vụ được giao</string>
     <string name="menu_created_task">Tác vụ đã tạo</string>
+    <string name="menu_relative_task">Tác vụ theo dõi</string>
     <string name="menu_take_leave">Xin nghỉ phép</string>
     <string name="menu_leave_list">Xem danh sách nghỉ phép</string>
     <string name="menu_leave_list_admin">Duyệt đơn nghỉ phép</string>

@@ -1,5 +1,7 @@
 package com.example.admin.projectcapstonemobile.model;
 
+import java.util.List;
+
 public class Notification {
     private Integer id;
     private String title;
@@ -10,7 +12,7 @@ public class Notification {
     private String createdTime;
     private User user;
     private User creator;
-
+    private List<String> keys;
     public Notification() {
     }
 
@@ -24,6 +26,19 @@ public class Notification {
         this.createdTime = createdTime;
         this.user = user;
         this.creator = creator;
+    }
+
+    public Notification(String title, String detail, List<String> keys) {
+        this.title = title;
+        this.detail = detail;
+        this.keys = keys;
+    }
+
+    public Notification(String title, String detail, String url, User user) {
+        this.title = title;
+        this.detail = detail;
+        this.url = url;
+        this.user = user;
     }
 
     public Integer getId() {
@@ -96,5 +111,13 @@ public class Notification {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public List<String> getKey() {
+        return keys;
+    }
+
+    public void setKey(List<String> key) {
+        this.keys = key;
     }
 }
