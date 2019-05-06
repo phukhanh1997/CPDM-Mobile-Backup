@@ -8,6 +8,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,7 +39,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
-    String userToken, userRole, displayName;
+    String userToken, userRole, displayName, viewNoti;
     Dialog dialog_logout;
     Button btn_confirm, btn_cancel;
 
@@ -48,6 +50,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         userToken = sharedPreferences.getString("userToken", "");
         userRole = sharedPreferences.getString("userRole", "");
         displayName = sharedPreferences.getString("displayName", "");
+        viewNoti = sharedPreferences.getString("viewNoti", "");
         if(userRole.equals("ROLE_STAFF")){
             setContentView(R.layout.activity_home);
         }
@@ -57,6 +60,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if(userRole.equals("ROLE_ADMIN")){
             setContentView(R.layout.activity_home_admin);
         }
+
 
         dialog_logout = new Dialog(this);
         dialog_logout.setTitle("Xác nhận đăng xuất");
@@ -96,7 +100,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open, R.string.navigation_drawer_open);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
     }
 
     @Override
@@ -202,16 +205,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.clear();
                             editor.commit();
-//                            new Thread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    try {
-//                                        FirebaseInstanceId.getInstance().deleteInstanceId();
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                            }).start();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        FirebaseInstanceId.getInstance().deleteInstanceId();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
                             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                             startActivity(intent);
                             HomeActivity.this.finish();

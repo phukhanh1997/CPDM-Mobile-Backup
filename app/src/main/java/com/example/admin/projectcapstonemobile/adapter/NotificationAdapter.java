@@ -59,6 +59,9 @@ public class NotificationAdapter extends BaseAdapter implements Serializable {
         if(!notification.isRead()){
             holder.imageView.setVisibility(View.VISIBLE);
         }
+        if(notification.isRead()){
+            holder.imageView.setVisibility(View.GONE);
+        }
 
         return convertView;
     }

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.os.Looper;
 import android.widget.Toast;
 
 import com.example.admin.projectcapstonemobile.R;
+import com.example.admin.projectcapstonemobile.activity.HomeActivity;
 import com.example.admin.projectcapstonemobile.activity.TaskDetailActivity;
 import com.example.admin.projectcapstonemobile.fragment.AssignedTaskFragment;
 import com.example.admin.projectcapstonemobile.fragment.ViewNotificationFragment;
@@ -40,16 +42,6 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         String notiContent = remoteMessage.getNotification().getBody();
         System.out.println("Title cua no la:" + notiTitle);
         System.out.println("Content cua no la " + notiContent);
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(FirebaseNotificationService.this.getApplicationContext(),
-                        "Ban nhan dc 1 thong bao tu` " + notiTitle + " voi noi dung la " +
-                                notiContent
-                        ,Toast.LENGTH_SHORT).show();
-            }
-        });
         sendNotification(remoteMessage.getNotification());
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -58,10 +50,10 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         System.out.println(remoteMessage.getData().toString());
     }
     private void sendNotification(RemoteMessage.Notification notification) {
-        Intent intent = new Intent(this, ViewNotificationFragment.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                0);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)

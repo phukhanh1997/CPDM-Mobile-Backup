@@ -65,6 +65,7 @@ public class ViewNotificationFragment extends Fragment {
                 Notification notification = (Notification) object;
                 String url = notification.getUrl();
                 String type = url.split("/")[1];
+                readNotification(userToken, notification.getId());
                 if(userRole.equals("ROLE_STAFF")){
                     if(type.equals("tasks")){
                         Integer taskId = Integer.parseInt(notification.getUrl().split("/")[2]);
@@ -87,6 +88,7 @@ public class ViewNotificationFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
                         intent.putExtra("taskId", taskId);
                         startActivity(intent);
+                        notification.setRead(true);
                     }
                     if(notification.getUrl().equals("/approverLeaveRequests")){
                         ViewLeaveRequestForManagerFragment fragment = new ViewLeaveRequestForManagerFragment();
@@ -117,6 +119,7 @@ public class ViewNotificationFragment extends Fragment {
                                 .replace(R.id.fragment_container, fragment, "abc")
                                 .addToBackStack(null)
                                 .commit();
+
                     }
                 }
 
@@ -136,5 +139,13 @@ public class ViewNotificationFragment extends Fragment {
             e.printStackTrace();
         }
         return listNoti;
+    }
+    private void readNotification(String userToken, Integer id){
+        Call<Notification> call = notificationService.readNotification("Bearer " + userToken, id);
+        try {
+            call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

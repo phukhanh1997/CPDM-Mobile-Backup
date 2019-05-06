@@ -238,6 +238,7 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
                                 @Override
                                 public void onResponse(Call<Notification> call, Response<Notification> response) {
                                     if(response.isSuccessful()){
+                                        Integer idRes = response.body().getId();
                                         databaseReference.child("users/").child(userApprove.getId().toString()).addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -247,21 +248,23 @@ public class TakeLeaveFragment extends Fragment implements com.wdullaer.material
                                                 System.out.println("Day la title " + title);
                                                 System.out.println("Day la detail " + detail);
                                                 Notification noti = new Notification(title, detail, abc);
-                                                Call<Void> callPush = notificationService.pushNotification("Bearer " + userToken, notification);
+                                                noti.setUrl("/approverLeaveRequests");
+                                                noti.setId(idRes);
+                                                Call<Void> callPush = notificationService.pushNotification("Bearer " + userToken, noti);
                                                 callPush.enqueue(new Callback<Void>() {
                                                     @Override
                                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                                         if(response.isSuccessful()){
-                                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                            //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
                                                         }
                                                         if(!response.isSuccessful()){
-                                                            Toast.makeText(getActivity(), "Not success", Toast.LENGTH_SHORT).show();
+                                                            //Toast.makeText(getActivity(), "Not success", Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
 
                                                     @Override
                                                     public void onFailure(Call<Void> call, Throwable t) {
-                                                        Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
+                                                        //Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                             }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -48,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import retrofit2.Call;
@@ -157,7 +159,7 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         //
         txt_to.setText(dateFormat.format(dateEnd));
         txt_taskTitle.setText(task.getTitle());
-        txt_taskSummary.setText(task.getDescription());
+        txt_taskSummary.setText(Html.fromHtml(task.getDescription()));
         mTxtStatus = findViewById(R.id.text_view_status);
         mTxtStatus.setText("Đang thực hiện");
         if (task.getStatus().equals("Waiting")) {
@@ -175,8 +177,16 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
             mLnlChangeStatus.setVisibility(View.GONE);
 //            btnChangeStatus.setEnabled(false);
         }
-        if(self.getId()!=task.getExecutor().getId() || self.getId()!=task.getCreator().getId()){
-            mLnlChangeStatus.setVisibility(View.GONE);
+        System.out.println("Self la`" + self.getId());
+        System.out.println("Creator la`" + task.getCreator().getId());
+        System.out.println("Executor la`" + task.getExecutor().getId());
+        Integer idSelf = self.getId();
+        Integer idExecutor = task.getExecutor().getId();
+        if(idSelf!=idExecutor){
+            mLnlChangeStatus.setVisibility(View.INVISIBLE);
+        }
+        if(idSelf==idExecutor){
+            mLnlChangeStatus.setVisibility(View.VISIBLE);
         }
 //        System.out.println("Luc load len la`" + btnChangeStatus.getText());
         //load issue
@@ -380,7 +390,6 @@ public class TaskDetailActivity extends AppCompatActivity implements View.OnClic
         mLnlViewAllComments = findViewById(R.id.linear_layout_view_all_comments);
         mLnlViewAllComments.setOnClickListener(this);
     }
-
 
 
     private List<Comment> getAllCommentByTaskId(Integer taskId) {
